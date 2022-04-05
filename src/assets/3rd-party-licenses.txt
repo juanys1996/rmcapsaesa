@@ -1,0 +1,6 @@
+---- Font Awesome ----
+Some Font Awesome's icons (.svg) and fonts are used. None was changed.
+https://fontawesome.com/license/free
+---- Material Icons ----
+Some Material's icons (.svg) are used. None was changed.
+https://www.apache.org/licenses/LICENSE-2.0.html

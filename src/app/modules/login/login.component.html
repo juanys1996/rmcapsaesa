@@ -1,0 +1,50 @@
+<div class="background-login">
+  <div class="row">
+    <div class="col-6 hidecolumn" style="position: relative;margin-top: 30vh;">
+      <div style="text-align: center;">
+        <img class="worker-logo" src="assets/images/saesa-worker.png">
+        <img class="grupo-saesa-logo" src="assets/images/grupo-saesa-white-original.png">
+        <!-- <img class="rmcap-logo" src="assets/images/rmcap-logo.png"> -->
+      </div>
+    </div>
+
+    <div class="col-6" style="margin-top: 30vh;">
+      <div style="text-align: center;">
+        
+        <!-- <img class="left-bracket-logo" src="assets/images/left_bracket.png"> -->
+        <form class="form-login" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <label style="color: white; font-size: 2em;">Bienvenidos</label>
+          <p class="text-cap">RMCAP 2.0</p>
+          <div class="form-group  mb-sm-3 mr-2 col-12 col-lg-12">
+            <div class="form-group mt-1">
+              <input formControlName="user" [value]="loginData.user"
+                (change)="changeInput('user', $event.target.value, 'string')" type="text"
+                class="form-control input-text mainLoginInput"
+                [ngClass]="{ 'is-invalid': submitted && f['user'].errors }" placeholder="Usuario" />
+              <div *ngIf="submitted && f['user'].errors" class="invalid-feedback">
+                <div *ngIf="f['user'].errors.required">Usuario es obligatorio</div>
+              </div>
+
+            </div>
+            <div class="form-group">
+              <input type="password" formControlName="password" [value]="loginData.password"
+                (change)="changeInput('password', $event.target.value, 'string')"
+                class="form-control input-text mainLoginInput"
+                [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" placeholder="Contraseña" />
+              <label *ngIf="!success" style="color: white; ">Error al validar correo y contraseña!</label>
+              <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                <div *ngIf="f['password'].errors.required">La contraseña es obligatoria</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button class="btn ingresar-button">Iniciar Sesión</button>
+              
+            </div>
+          </div>
+        </form>
+        <!-- <img class="right-bracket-logo" src="assets/images/left_bracket.png"> -->
+      </div>
+    </div>
+  </div>
+</div>

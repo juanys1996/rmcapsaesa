@@ -1,0 +1,71 @@
+table {
+  max-height: calc(100vh - 321px);
+  /* 321px is every other component height */
+  margin-bottom: 0;
+
+  thead {
+
+    th {
+      position: sticky;
+      top: 0;
+      vertical-align: middle;
+      text-align: center;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      white-space: nowrap;
+      color: white;
+      background-color: #004b87;
+    }
+  }
+
+  tbody {
+
+    td {
+      padding: 7px;
+    }
+
+    .td-full {
+      white-space: nowrap;
+    }
+
+    .td-centered {
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .td-truncated {
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .actions {
+      white-space: nowrap;
+
+      span {
+        margin-left: 1px;
+        margin-right: 1px;
+      }
+
+      .active {
+        cursor: pointer;
+      }
+
+      .disabled {
+        cursor: default;
+      }
+    }
+  }
+}
+
+.pagination {
+  padding-top: 5px !important;
+  padding-bottom: 0 !important;
+
+  .spinner {
+    width: 35px;
+    height: 35px;
+    color: #004b87;
+  }
+}

@@ -1,0 +1,78 @@
+<div class="capacitacion-modal">
+  <div class="header">
+    <h3 *ngIf="mode == 'Crear'">Crear Planificaci&oacute;n</h3>
+    <h3 *ngIf="mode == 'Editar'">Editar Planificaci&oacute;n</h3>
+  </div>
+  <div class="body">
+    <div *ngIf="!isRead">
+    </div>
+    <div class="fields-left">
+      <div class="field-div">
+        <label *ngIf="errors.codigo" class="error">(*)</label>
+        <label>C&oacute;digo Planificaci&oacute;n:</label>
+        <input type="text" [class]="'form-control' + (errors.codigo ? ' error-border' : '')"
+          [value]="categoria.codigo" (change)="changeInput('codigo', $event.target.value)" maxlength="50" />
+      </div>
+      <div class="field-div">
+        <label *ngIf="errors.descripcion" class="error">(*)</label>
+        <label>Descripci&oacute;n:</label>
+        <input type="text" [class]="'form-control' + (errors.descripcion ? ' error-border' : '')"
+          [value]="categoria.descripcion" (change)="changeInput('descripcion', $event.target.value)" maxlength="50" />
+      </div>
+      <div class="field-div">
+        <label *ngIf="errors.fechaInicio" class="error">(*)</label>
+        <label>Fecha Inicio:</label>
+        <input [class]="'form-control' + (errors.fechaInicio ? ' error-border' : '')"  [startDate]="startDate" (click)="dp1.toggle()" name="dp1" [(ngModel)]="modelInicio" ngbDatepicker #dp1="ngbDatepicker"/>
+      </div>
+      <div class="field-div">
+        <label *ngIf="errors.fechaTermino" class="error">(*)</label>
+        <label>Fecha T&eacute;rmino:</label>
+        <input [class]="'form-control' + (errors.fechaTermino ? ' error-border' : '')" [startDate]="finishDate" (click)="dp2.toggle()" name="dp2" [(ngModel)]="modelFin" ngbDatepicker #dp2="ngbDatepicker"/>
+      </div>
+      <div class="field-div">
+        <label *ngIf="errors.empresa" class="error">(*)</label>
+        <label>Empresas:</label>
+        <ng-select class="container-empresa" [items]="empresas" bindLabel="empresa" bindValue="empresa"
+          placeholder="Elija las Empresas" [multiple]="true" [clearable]="true" [(ngModel)]="selectedIdEmpresa">
+        </ng-select>
+      </div>
+      <div *ngIf="mode == 'Editar'" class="field-div">
+        <label *ngIf="errors.estado" class="error">(*)</label>
+        <label>Estado:</label>
+        <select [class]="'form-control'" [value]="categoria.estado"
+          (change)="changeInput('estadoId', $event.target.value, 'number')">
+          <option value="true">Habilitado</option>
+          <option value="false">Deshabilitado</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <label *ngIf="showErrorMessage" class="error-message">Error al guardar.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.codigo" class="error-message">(*) Campo C&oacute;digo es obligatorio.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.descripcion" class="error-message">(*) Campo Descripci&oacute;n es obligatorio.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.fechaInicio" class="error-message">(*) Debe indicar una fecha de inicio .</label>
+    </div>
+    <div>
+      <label *ngIf="errors.fechaTermino" class="error-message">(*) Debe indicar una fecha de t&eacute;rmino mayor a la fecha de inicio.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.empresa" class="error-message">(*) Se debe seleccionar al menos una empresa.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.estado" class="error-message">(*) Campo Estado es obligatorio.</label>
+    </div>
+    <div *ngIf="loading" class="spinner-border spinner" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <div class="footer">
+    <button type="button" class="btn cancel-btn" (click)="modalCategoria.dismiss('Cancel')">Cancelar</button>
+    <button type="button" class="btn accept-btn" (click)="onSave()">Guardar</button>
+  </div>
+</div>

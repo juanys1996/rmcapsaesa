@@ -1,0 +1,94 @@
+<table class="table table-striped table-responsive">
+  <thead>
+    <th>Id</th>
+    <th>Zona</th>
+    <th *ngIf="rolid == 1">Empresa</th>
+    <th *ngIf="rolid == 1 || rolid == 2">Contratista</th>
+    <th>Tipo</th>
+    <th>Nombre</th>
+    <th>Categoría</th>
+    <th>Foco</th>
+    <th>Ejecutor</th>
+    <th>Mes planificación</th>
+    <th>Estado</th>
+    <th>Acciones</th>
+  </thead>
+  <tbody>
+    <!-- <tr *ngFor="let row of rows | filterBy: searchText"> -->
+    <tr *ngFor="let row of rows">
+      <td *ngFor=" let cell of row.cells" [class]="cell.class">
+        <ng-container *ngIf="cell.tooltip">
+          <span [ngbTooltip]="cell.content" placement="left">
+            {{cell.content}}
+          </span>
+        </ng-container>
+        <ng-container *ngIf="!cell.tooltip">
+          {{cell.content}}
+        </ng-container>
+      </td>
+      <td class="actions">
+        <span class="active" (click)="openInformationModal(capacitacionModal, row.capacitacion, row.workers)"
+          [ngbTooltip]="'Visualizar'">
+          <img src="assets/icons/eye.svg" />
+        </span>
+        <span [class]="isIconActiveDelete(row.capacitacion) ? 'active' : 'disabled'"
+          (click)="openDeleteModal(confirmationModal, row.capacitacion)" [ngbTooltip]="'Eliminar'">
+          <img
+            [src]="isIconActiveDelete(row.capacitacion) ? 'assets/icons/trashcan.svg' : 'assets/icons/trashcan_gray.svg'" />
+        </span>
+        <span class="isIconActiveEdit( row.capacitacion) ? 'active' : 'disabled'"
+          (click)="openEditionModal(capacitacionModal, row.capacitacion, row.workers)" [ngbTooltip]="'Editar'">
+          <img
+            [src]="isIconActiveEdit( row.capacitacion) ? 'assets/icons/pencil.svg' : 'assets/icons/pencil_gray.svg'" />
+        </span>
+        <span [class]="isIconActiveSend(row.capacitacion) ? 'active' : 'disabled'"
+          (click)="openSendForAcceptanceModal(confirmationModal, row.capacitacion)"
+          [ngbTooltip]="'Enviar para aprobación'">
+          <img
+            [src]="isIconActiveSend(row.capacitacion) ? 'assets/icons/send.svg' : 'assets/icons/send_disabled.svg'" />
+        </span>
+        <span [class]="isIconActiveAccept(row.capacitacion) ? 'active' : 'disabled'"
+          (click)="openAcceptModal(confirmationModal, row.capacitacion, row.workers, capacitacionModal)"
+          [ngbTooltip]="'Aprobar/Cerrar'">
+          <img
+            [src]="isIconActiveAccept( row.capacitacion) ? 'assets/icons/check.svg' : 'assets/icons/check_disabled.svg'" />
+        </span>
+        <span [class]="isIconActiveReject( row.capacitacion) ? 'active' : 'disabled'"
+          (click)="openRejectModal(confirmationModal, row.capacitacion)" [ngbTooltip]="'Rechazar'">
+          <img
+            [src]="isIconActiveReject( row.capacitacion) ? 'assets/icons/cross.svg' : 'assets/icons/cross_disabled.svg'" />
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="d-flex justify-content-between p-2 pagination">
+  <ngb-pagination [collectionSize]="totalAmmount" [page]="page + 1" (pageChange)="onChangePage($event - 1)"
+    [pageSize]="pageSize" [maxSize]="1" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+
+  <div *ngIf="loading" class="spinner-border spinner" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+
+  <select class="custom-select" style="width: auto" name="pageSize" (change)="onChangeSize($event.target.value)">
+    <option *ngFor="let option of sizeOptions" [value]="option.value">{{option.label}}</option>
+  </select>
+</div>
+
+<ng-template #capacitacionModal let-modal>
+  <app-capacitacion-modal [modal]="modal" [mode]="capacitacionModalMode" [categoriesWithFocos]="categoriesWithFocos"
+    [enfoques]="enfoques" [ejecutoresWithRelatores]="ejecutoresWithRelatores" [capacitacion]="capacitacionSelected"
+    [workersIdSelected]="capacitacionSelectedWorkersIds" [workersSelected]="capacitacionSelectedWorkers"
+    [confirmationModalOptionLabel]="confirmationModalOptionLabel" [confirmationModalOptions]="confirmationModalOptions"
+    [zonas]="zonas" (save)="onChangePage(page)" (accept)="onChangePage(page)" (reject)="onChangePage(page)">
+  </app-capacitacion-modal>
+</ng-template>
+
+<ng-template #confirmationModal let-modal>
+  <app-confirmation-modal [modal]="modal" [tittle]="confirmationModalTittle" [message]="confirmationModalMessage"
+    [hasComment]="confirmationModalHasComment" [hasOptions]="confirmationModalHasOptions"
+    [isCommentObligatory]="confirmationModalisCommentObligatory" [optionLabel]="confirmationModalOptionLabel"
+    [options]="confirmationModalOptions" (accept)="confirmationModalAccept($event.comment, $event.option)">
+  </app-confirmation-modal>
+</ng-template>

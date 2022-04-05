@@ -1,0 +1,137 @@
+<div class="capacitaciones-page">
+    <!-- <div>
+      <img class="img-logo" src="assets/images/rmcap-logo.png" />
+    </div> -->
+    <div class="carga-masiva-section" style="margin: 20px;">
+      <div class="carga-masiva-header">
+        <h3>Carga masiva de Capacitaciones</h3>
+      </div>
+      
+      <div class="capacitaciones-body">
+        <div style="display: inline-block">
+          <p>Seleccione un Archivo: </p>
+        </div>
+        <br>
+        <div style="display: inline-block; font-size: 12px;">
+          <input #archivo type="file" class="form-carga" (change)="addfile($event, archivo)" placeholder="Seleccionar..." accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+        </div>
+      </div>
+      <div class="capacitaciones-body cita">
+        <p style="padding-top: 30px;">
+          **En caso de no contar con la plantilla, puedes descargarla pinchando<label style="font-size: 12px;text-decoration:underline;" role="button" href="javascript:void(0)"  (click)="downloadXslx()">ac&aacute;</label>
+      </p> 
+      </div>
+    </div>
+    <form>
+      <div id="divMensaje" class="alert alert-danger" role="alert" *ngIf="error">
+          {{mensajeError}}
+      </div>
+      <div id="divMensaje" class="alert alert-success" role="alert" *ngIf="exitoInsercion">
+        {{mensajeError}}
+      </div>
+    </form>
+    <div class="carga-masiva-section" *ngIf="dataRange.length > 0">
+      <div class="carga-masiva-header" style="margin-bottom: 0px;">
+          <h3>Capacitaciones ingresadas</h3>
+      </div>
+      <br>
+      <div>
+          <button type="button" class="btn accept-btn" [disabled]="existeError ? true : null" (click)="onSave(1)">Enviar a Aprobaci&oacute;n</button>
+      </div>
+      <div>
+        <table class="table-responsive">
+          <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Zona</th>
+                <th>Categor&iacute;a</th>
+                <th>Foco</th>
+                <th>Enfoque</th>
+                <th>Observaci&oacute;n</th>
+                <th>Ejecutor</th>
+                <th>Relator</th>
+                <th>Fecha Capacitaci&oacute;n</th>
+                <th>Asistentes</th>
+                <th>Dur. Estimada (HH)</th>
+                <th *ngIf="rolid != 3">Contratista</th>
+                <th>Proceso</th>
+            </tr>
+          </thead>
+            <tbody id="myTable">
+                <tr *ngFor="let capacitaciones of dataRange;">
+                    <td>
+                        <span (blur)="updateList(capacitaciones[0], 1, $event)" contenteditable="true" class="contenteditable">
+                            {{capacitaciones[1]}}
+                        </span>
+                    </td>
+                    <td>
+                        <span contenteditable="false">
+                            {{capacitaciones[2]}}
+                        </span>
+                    </td>
+                    <td>
+                        <span contenteditable="false">
+                            {{capacitaciones[3]}}
+                        </span>
+                    </td>
+                    <td>
+                        <span contenteditable="false">
+                            {{capacitaciones[4]}}
+                        </span>
+                    </td>
+                    <td>
+                        <span contenteditable="false">
+                            {{capacitaciones[5]}}
+                        </span>
+                    </td>
+                    <td>
+                        <span contenteditable="false">
+                            {{capacitaciones[6]}}
+                        </span>
+                    </td>
+                    <td>
+                        <span contenteditable="false">
+                            {{capacitaciones[7]}}
+                        </span>
+                    </td>
+                    <td>
+                        <span contenteditable="false">
+                            {{capacitaciones[8]}}
+                        </span>
+                    </td>
+                    <td>
+                        <span (blur)="updateList(capacitaciones[0], 9, $event)" contenteditable="true" class="contenteditable">
+                            {{capacitaciones[9]}}
+                        </span>
+                    </td>
+                    <td>
+                        <span (blur)="updateList(capacitaciones[0], 10, $event)" contenteditable="true" class="contenteditable">
+                            {{capacitaciones[10]}}
+                        </span>
+                    </td>
+                    <td>
+                        <span (blur)="updateList(capacitaciones[0], 11, $event)" contenteditable="true" class="contenteditable">
+                            {{capacitaciones[11]}}
+                        </span>
+                    </td>
+                    <td *ngIf="rolid == 3">
+                        <span contenteditable="false">
+                          {{capacitaciones[12]}}
+                        </span>
+                      </td>
+                    <td *ngIf="rolid != 3">
+                      <span contenteditable="false">
+                          {{capacitaciones[12]}}
+                      </span>
+                    </td>
+                    <td *ngIf="rolid != 3">
+                      <span contenteditable="false">
+                        {{capacitaciones[13]}}
+                      </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

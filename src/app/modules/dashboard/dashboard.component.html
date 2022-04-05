@@ -1,0 +1,149 @@
+<div>
+  <div *ngIf="showIndicators" class="indicators-section">
+    <div class="indicators-header">
+      <h3>Indicadores (En Relaci&oacute;n a Planes Creados el A&ntilde;o en Curso)</h3>
+    </div>
+    <div class="indicators-body row" [ngbCollapse]="isIndicatorsCollapsed">
+      <div [ngClass]='indicatorRealizadas' class="cursor col">
+        <p class="tittle">Capacitaciones Realizadas</p>
+        <label class="value-label">{{indicadores.capacitacionesRealizadas ||
+          0}}/{{indicadores.capacitacionesPlanificadas +  indicadores.capacitacionesReforzamiento  || 0}}</label>
+        <img src="assets/icons/check_circle_green.svg" />
+      </div>
+      <div [ngClass]='indicatorPlanificadas' class="cursor col">
+        <p class="tittle">Capacitaciones Planificadas</p>
+        <label class="value-label">{{indicadores.capacitacionesPlanificadas || 0}}</label>
+        <img src="assets/icons/up_green.svg" />
+        <img src="assets/icons/teacher_gray.svg" />
+      </div>
+      <div [ngClass]='indicatorReforzamiento' class="cursor col">
+        <p class="tittle">Capacitaciones de Reforzamiento</p>
+        <label class="value-label">{{indicadores.capacitacionesReforzamiento || 0}}</label>
+        <img src="assets/icons/plus.png" />
+        <img src="assets/icons/mano.png" />
+      </div>
+      <div id="indicator-card" class="indicator-card col">
+        <p class="tittle">Horas de Capacitación</p>
+        <div class="value-labels-div">
+          <label class="value-label">Totales<br> {{indicadores.capacitacionesHoras || 0}}</label>
+        </div>
+        <img src="assets/icons/clock_gray.svg">
+      </div>
+      <div id="indicator-card" class="indicator-card col">
+        <p class="tittle">Trabajadores Capacitados</p>
+        <label class="value-label">{{indicadores.sumAsistance || 0}}</label>
+        <img src="assets/icons/hard_hat_yellow.svg" />
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-section">
+    <div class="row">
+      <div class="col">
+        <label>Seleccione en A&ntilde;o del Plan: </label>
+      </div>
+      <div class="col">
+        <select class="form-control" (change)="onAnioChange($event, false)">
+          <option value="0"> Todos</option>
+          <option *ngFor="let anio of listaAnio" [value]="anio">
+            {{ anio }}
+          </option>
+        </select>
+      </div>
+      <div class="col">
+        <label>Seleccione un Mes: </label>
+      </div>
+      <div class="col">
+        <select class="form-control" (change)="onMesChange($event, false)">
+          <option value="0"> Todos</option>
+          <option *ngFor="let mes of listaMeses" [value]="mes.id">
+            {{ mes.label }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 5px">
+      <div class="col">
+        <label>Seleccione una Zona:</label>
+      </div>
+      <div class="col">
+        <select class="form-control" (change)="onZonaChange($event, false)">
+          <option value="0"> Todos</option>
+          <option *ngFor="let zona of listaZonas" [value]="zona">
+            {{ zona }}
+          </option>
+        </select>
+      </div>
+      <div class="col">
+        <label>Seleccione un Tipo de Capacitaci&oacute;n:</label>
+      </div>
+      <div class="col">
+        <select class="form-control" (change)="onTipoCapacitacionChange($event, false)">
+          <option value="0"> Todos</option>
+          <option value="plan"> Plan de Capacitaci&oacute;n</option>
+          <option value="reforzamiento"> Reforzamiento</option>
+        </select>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col">
+        <button class="btn filtrar-button" (click)="mostrarGraficosFiltrados()">
+          Filtrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-section">
+    <div class="row">
+      <div class="col" style="padding: 0;">
+        <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+          [title]="chartOptions.title" [responsive]="chartOptions.responsive"></apx-chart>
+      </div>
+      <div class="col" style="padding: 0;">
+        <apx-chart [series]="chartOptions3.series" [chart]="chartOptions3.chart" [xaxis]="chartOptions3.xaxis"
+          [title]="chartOptions3.title" [responsive]="chartOptions3.responsive"></apx-chart>
+      </div>
+      <div class="col" style="padding: 0;">
+        <apx-chart [series]="chartOptions4.series" [chart]="chartOptions4.chart" [xaxis]="chartOptions4.xaxis"
+          [title]="chartOptions4.title" [responsive]="chartOptions4.responsive"></apx-chart>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 50px">
+      <div class="col-12">
+        <apx-chart [series]="chartOptions5.series" [chart]="chartOptions5.chart" [dataLabels]="chartOptions5.dataLabels"
+          [plotOptions]="chartOptions5.plotOptions" [xaxis]="chartOptions5.xaxis" [stroke]="chartOptions5.stroke"
+          [fill]="chartOptions5.fill" [yaxis]="chartOptions5.yaxis" [title]="chartOptions5.title"
+          [tooltip]="chartOptions5.tooltip" [legend]="chartOptions5.legend"></apx-chart>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="dashboard-section">
+    <table class="table table-striped table-bordered">
+      <thead>
+        <th>Empresa</th>
+        <th>Total HH</th>
+        <th>Total Programas</th>
+        <th>Realizadas</th>
+        <th>No Realizadas</th>
+        <th>Cumplimiento</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let resumen of resumenCapacitaciones | paginate: {itemsPerPage : 5, currentPage: pageActual}">
+          <td>{{resumen.nombreContratista}}</td>
+          <td>{{resumen.cantidadHH}}</td>
+          <td>{{resumen.cantidadProgramas}}</td>
+          <td>{{resumen.cantidadRealizadas}}</td>
+          <td>{{resumen.cantidadNoRealizadas}}</td>
+          <td>{{resumen.cumplimiento}}%</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="pageActual = $event" class="pagination"></pagination-controls>
+  </div>
+</div>

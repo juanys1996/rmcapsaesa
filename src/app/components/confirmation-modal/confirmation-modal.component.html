@@ -1,0 +1,36 @@
+<div class="delete-modal">
+  <div class="header">
+    <label>{{tittle}}</label>
+  </div>
+  <div class="body">
+    <p>{{message}}</p>
+    <div *ngIf="hasOptions" class="options">
+      <label *ngIf="!isCommentObligatory">{{optionLabel}}</label>
+      <label *ngIf="isCommentObligatory" >*Motivo</label>
+      <label *ngIf="isCommentObligatory && errors.option" class="error">Debes seleccionar un motivo</label>
+      <select class="form-control shadow-none" (change)="changeOption($event.target.value)">
+        <option value="0">Elegir</option>
+        <option *ngFor="let option of options" [value]="option.value">{{option.label}}</option>
+      </select>
+    </div>
+    <div *ngIf="hasComment" class="comment">
+      <label *ngIf="isCommentObligatory">*Comentario:</label>
+      <label *ngIf="isCommentObligatory && errors.comment" class="error">Campo obligatorio</label>
+      <input
+        class="form-control shadow-none"
+        type="text"
+        [class]="'form-control' + (errors.comment ? ' error-border' : '')"
+        placeholder="Comentario..."
+        (change)="changeComment($event.target.value)"
+      />
+    </div>
+  </div>
+  <div class="footer">
+    <button type="button" class="btn cancel-btn" (click)="modal.dismiss('Cancel')">Cancelar</button>
+    <button
+      type="button"
+      class="btn accept-btn"
+      (click)="onAccept()"
+    >Confirmar</button>
+  </div>
+</div>

@@ -1,0 +1,153 @@
+<div class="capacitacion-modal">
+  <div class="header">
+    <!-- <label>Crear Usuario</label> -->
+    <h3 *ngIf="mode == 'Crear'">Crear Usuario</h3>
+    <h3 *ngIf="mode == 'Editar'">Editar Usuario</h3>
+  </div>
+  <div class="body">
+    <div *ngIf="!isRead">
+      <!-- <label class="indication-label">(*) indica campo obligatorio</label> -->
+    </div>
+    <div class="fields-left">
+      <div class="field-div">
+        <label *ngIf="errors.name" class="error">(*)</label>
+        <label>Nombre usuario:</label>
+        <input type="text" [class]="'form-control' + (errors.name ? ' error-border' : '')" [value]="usuario.userName"
+          (change)="changeInput('userName', $event.target.value)" pattern="[a-zA-Zñáéíóú#0-9-.,°#()]*" maxlength="50"
+          required />
+      </div>
+      <div class="field-div">
+        <label *ngIf="errors.password" class="error">(*)</label>
+        <label>Contraseña:</label>
+        <label class="value-label" *ngIf="isRead" placement="left"
+          [ngbTooltip]="usuario.password">{{usuario.password}}</label>
+        <input type="password" [class]="'form-control' + (errors.password ? ' error-border' : '')"
+          [value]="usuario.password" (change)="changeInput('password', $event.target.value)" maxlength="128" />
+      </div>
+      <div class="field-div">
+        <label *ngIf="errors.email" class="error">(*)</label>
+        <label>Email:</label>
+        <label class="value-label" *ngIf="isRead" placement="left"
+          [ngbTooltip]="usuario.email">{{usuario.email}}</label>
+        <input type="email" [class]="'form-control' + (errors.email ? ' error-border' : '')" [value]="usuario.email"
+          (change)="changeInput('email', $event.target.value)" maxlength="100" />
+      </div>
+      <div class="field-div">
+        <label>Nombre trabajador:</label>
+        <label class="value-label" *ngIf="isRead" placement="left"
+          [ngbTooltip]="usuario.nombre_trabajador">{{usuario.nombre_trabajador}}</label>
+        <input type="text" [class]="'form-control'" [value]="usuario.nombre_trabajador"
+          (change)="changeInput('nombre_trabajador', $event.target.value)" maxlength="50" />
+      </div>
+      <div class="field-div">
+        <label>Apellido paterno:</label>
+        <label class="value-label" *ngIf="isRead" placement="left"
+          [ngbTooltip]="usuario.apellido_paterno">{{usuario.apellido_paterno}}</label>
+        <input type="text" [class]="'form-control'" [value]="usuario.apellido_paterno"
+          (change)="changeInput('apellido_paterno', $event.target.value)" maxlength="50" />
+      </div>
+      <div class="field-div">
+        <label>Apellido materno:</label>
+        <label class="value-label" *ngIf="isRead" placement="left"
+          [ngbTooltip]="usuario.apellido_materno">{{usuario.apellido_materno}}</label>
+        <input type="text" [class]="'form-control'" [value]="usuario.apellido_materno"
+          (change)="changeInput('apellido_materno', $event.target.value)" maxlength="50" />
+      </div>
+      <div class="field-div">
+        <label *ngIf="errors.rut_trabajador" class="error">(*)</label>
+        <label>Rut trabajador:</label>
+        <label class="value-label" *ngIf="isRead" placement="left"
+          [ngbTooltip]="usuario.rut_trabajador">{{usuario.rut_trabajador}}</label>
+        <input type="text" [class]="'form-control'" [value]="usuario.rut_trabajador"
+          (change)="changeInput('rut_trabajador', $event.target.value, 'number')" placeholder="12.345.678-9"
+          maxlength="12" mask="00.000.000-A" />
+      </div>
+
+
+      <div *ngIf="mode == 'Editar'" class="field-div">
+        <label *ngIf="errors.estado" class="error">(*)</label>
+        <label>Estado:</label>
+        <select [class]="'form-control'" [value]="usuario.estado"
+          (change)="changeInput('estadoId', $event.target.value, 'number')">
+          <option value="true">Habilitado</option>
+          <option value="false">Deshabilitado</option>
+        </select>
+      </div>
+    </div>
+    <div class="fields-right">
+      <div class="field-div">
+        <label *ngIf="errors.rolId" class="error">(*)</label>
+        <label>Empresa:</label>
+        <select [class]="'form-control'" [value]="usuario.nombre_empresa"
+          (change)="changeInput('nombre_empresa', $event.target.value)">
+          <option *ngFor="let empresas of listaEmpresas" [value]="empresas">
+            {{empresas}}
+          </option>
+        </select>
+      </div>
+      <div class="field-div">
+        <label *ngIf="errors.rolId" class="error">(*)</label>
+        <label>Rol:</label>
+        <select [class]="'form-control'" [value]="usuario.rolId"
+          (change)="changeInput('rolid', $event.target.value, 'number')">
+          <option value="3">Contratista</option>
+          <option value="2">Empresa</option>
+          <option value="1">Administrador</option>
+        </select>
+      </div>
+      <div *ngIf="usuario.rolId == 3" class="field-div">
+        <label>Encargado:</label>
+        <label class="value-label" *ngIf="isRead" placement="left"
+          [ngbTooltip]="usuario.idEmpresa">{{usuario.idEmpresa}}</label>
+        <select [class]="'form-control'" [value]="usuario.idEmpresa"
+          (change)="changeInput('idEmpresa', $event.target.value)">
+          <option *ngFor="let empresa of usersEnteprise" [value]="empresa.usuario.userId">
+            {{empresa.usuario.nombreTrabajador + " " + empresa.usuario.apellidoPaterno}}</option>
+        </select>
+      </div>
+      <div class="field-div">
+        <label *ngIf="errors.zona" class="error">(*)</label>
+        <label>Zona:</label>
+        <ng-select class="container-zona" [items]="zonas" bindLabel="descripcion" bindValue="zoneId"
+          placeholder="Elija las zonas" [multiple]="true" [clearable]="true" [(ngModel)]="selectedIdZone">
+        </ng-select>
+      </div>
+    </div>
+    <div>
+      <label *ngIf="showErrorMessage" class="error-message">Error al guardar.</label>
+      <label *ngIf="showErrorMessageRepeated" class="error-message">Usuario ya existe.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.name" class="error-message">(*) Campo Nombre usuario no puede contener espacios, ni
+        caracteres
+        especiales.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.rolId" class="error-message">(*) Campo Rol es obligatorio.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.zona" class="error-message">(*) Debe seleccionar una o más zonas.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.email" class="error-message">(*) Verifique el Campo Email.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.password" class="error-message">(*) Campo Contraseña es obligatorio y mayor a 6
+        caracteres.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.rut_trabajador" class="error-message">(*) Campo Rut Trabajador no es valido.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.estado" class="error-message">(*) Campo Estado es obligatorio.</label>
+    </div>
+    <div *ngIf="loading" class="spinner-border spinner" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <div class="footer">
+    <!-- <div *ngIf="!isRead || flags.Guardar" class="footer"> -->
+    <button type="button" class="btn cancel-btn" (click)="modal.dismiss('Cancel')">Cancelar</button>
+    <button type="button" class="btn accept-btn" (click)="onSave()">Guardar</button>
+  </div>
+</div>

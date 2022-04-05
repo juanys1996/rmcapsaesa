@@ -1,0 +1,75 @@
+@mixin section-box {
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #e3e6f0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-section{      
+    @include section-box;
+    margin: 10px;
+    padding: 20px;
+    font-family: "Lato", sans-serif;
+
+    label {
+        margin-bottom: 0;
+        color: #4a4a4a;
+        font-size: 14px;
+    }
+
+    .btn-link{
+        color: rgb(255, 255, 255);
+    }
+}
+
+.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+table {
+    font-family: 'Lato', sans-serif;
+    max-height: calc(112vh - 321px);
+    /* 321px is every other component height */
+    margin-bottom: 0;
+    width: 98%;
+    margin: auto;
+    font-size: 14px;
+
+  
+    thead {
+  
+      th {
+        position: sticky;
+        top: 0;
+        vertical-align: middle;
+        text-align: center;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        white-space: nowrap;
+        color: #003770;
+        font-weight: 700;
+        background-color: #f0f0f0;
+      }
+    }
+  }
+
+  .table th, .table td{
+      text-align: center !important;
+  }
+
+  .pagination{
+    font-family: "Lato", sans-serif;
+    margin-top: 20px;
+    font-size: 14px;
+    display: block;
+    text-align: center;
+}
+

@@ -1,0 +1,107 @@
+ <!-- BARRA SUPERIOR -->
+<nav *ngIf="getActualPage() != '/login'" class="navbar">
+  <button type="button" class="btn menu-btn" id="close-arrow" (click)="toggleSidebar()" data-toggle="collapse" [disabled]="sidebarIsOpen ? true : false" >
+    <img [src]="sidebarIsOpen ? '' : 'assets/images/Imagen2.png'" style="width: 40px;" />
+  </button>
+  <p class="text-cap" *ngIf="sidebarIsOpen">RMCAP 2.0</p>
+  <button type="button" class="btn logout-btn" (click)="logout()">Cerrar sesión</button>
+</nav>
+
+<!-- MENU SIDEBAR -->
+<div *ngIf="getActualPage() != '/login'" id="sidebar" class="sidebar">
+  <div class="header">
+    <img src="assets/images/modo-seguro-logo.png" (click)="toggleSidebar()" />
+  </div>
+  <label class="greeting">Hola</label>
+
+  <label class="greeting-username">{{nombreUsuario}}</label>
+  <img src="assets/images/saesa-worker.png" class="saesa-worker" />
+  
+  <div class="header modulos">
+    MÓDULOS&nbsp; <i class="fa fa-angle-double-down"></i>
+  </div>
+  
+
+  <div *ngIf="rolid == 1">
+    <a  class="text-color" (click)="openComponentDashboard()">
+      <div class="fa fa-home"></div>
+      <span class="menu-item"></span>Inicio</a>
+    </div>
+
+  <div>
+    <a  class="text-color" *ngIf="rolid == 3" (click)="openComponentDashboardContratista()">
+      <div class="fa fa-home"></div>
+      <span class="menu-item" ></span>Inicio</a>
+  </div>
+  
+  <!-- Planificacion -->
+  <div class="treeview menu-open active">
+    <a  class="text-color-hover" (click)="openComponentCapacitaciones()">
+      <div class="fa fa-calendar"></div>
+      <span class="menu-item"></span>Ver Planificaci&oacute;n
+      <!-- <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+        </span> -->
+    </a>
+    <ul class="treeview-menu">
+      <div *ngIf="rolid == 1" class="submenu-item">
+        <label (click)="openModalCargaPlan(cargaPlanModal)">
+          <div class="icon-add"></div>
+          Generaci&oacute;n Plan Base
+        </label>
+      </div>
+      <!--<div class="submenu-item">
+        <label (click)="openModal(capacitacionModal, 'planificar')">
+          <div class="icon-add"></div>
+          Planificar
+        </label>
+      </div>-->
+      
+      <div class="submenu-item">
+        <label (click)="openComponentCargaMasiva()">
+          <div class="icon-add"></div>
+          Cargar Plan de Capacitaci&oacute;n
+        </label>
+      </div>
+    
+      <div class="submenu-item">
+        <label (click)="openAprobacion()">
+          <div class="icon-add"></div>
+          Revisi&oacute;n de Planes
+        </label>
+      </div>
+    
+      <div class="submenu-item">
+        <label (click)="openModal(capacitacionModal, 'reforzamiento')">
+          <div class="icon-add"></div>
+          Añadir reforzamiento
+        </label>
+      </div>
+    </ul>
+  </div>
+
+  
+  <div *ngIf="rolid == 1">
+    <a class="text-color" (click)="openMantenedores()">
+      <div class="fa fa-list-alt"></div>
+      <span class="menu-item" ></span>Mantenedores</a>
+  </div>
+
+  <div>
+    <img style="width: 80%; margin: 20px 0px;" src="assets/images/grupo-saesa-white-original.png">
+  </div>
+  
+</div>
+
+<ng-template #capacitacionModal let-modal>
+  <app-capacitacion-modal [modal]="modal" [mode]="creationMode" [categoriesWithFocos]="categoriesWithFocos"
+    [enfoques]="enfoques" [ejecutoresWithRelatores]="ejecutoresWithRelatores" [zonas]="zonas" (save)="onSave()"
+    (accept)="onSaveAccept()">
+  </app-capacitacion-modal>
+</ng-template>
+
+<ng-template #cargaPlanModal let-modal>
+  <app-carga-plan-modal>
+    
+  </app-carga-plan-modal>
+</ng-template>

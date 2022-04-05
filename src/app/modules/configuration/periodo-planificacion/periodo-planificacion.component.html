@@ -1,0 +1,70 @@
+<div *ngIf="loadingPlanificacion" class="spinner-border spinner" role="status">
+    <span class="sr-only">Loading...</span>
+</div>
+<div>
+<!--<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggerPlanificacion" class="table-striped table-responsive">-->
+<table datatable  [dtTrigger]="dtTriggerPlanificacion" class="table table-striped table-responsive">
+    <thead>
+      <tr>
+        <th>Acciones</th>
+        <th>C&oacute;digo</th>
+        <th>Descripci&oacute;n</th>
+        <th>Fecha Inicio</th>
+        <th>Fecha T&eacute;rmino</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let planificacion of planificacionMantenedor | paginate: {itemsPerPage : 10, currentPage: pageActualPlanificacion}">
+        <td class="td-centered icons">
+          <span (click)="onCreatePlanificacion(planificacionModal,'Editar', planificacion)" [ngbTooltip]="'Editar'">
+            <img [src]="'assets/icons/pencil.svg'" />
+          </span>
+          <span (click)="openDeleteModalPlanificacion(confirmationModal, planificacion)" [ngbTooltip]="'Deshabilitar'">
+            <img [src]="'assets/icons/trashcan.svg'" />
+          </span>
+        </td>
+        <td class="td-centered">{{planificacion.codigoPlanificacion}}</td>
+        <td class="td-centered">{{planificacion.descripcion}}</td>
+        <td class="td-centered">{{planificacion.fechaInicio}}</td>
+        <td class="td-centered">{{planificacion.fechaTermino}}</td> 
+        <td class="td-centered">{{getEstadoLabel(planificacion.statusPlanificacion)}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls (pageChange)="pageActualRelator = $event" class="pagination"></pagination-controls>
+</div>
+
+<ng-template #confirmationModal let-modal>
+  <app-confirmation-modal [modal]="modal" [tittle]="confirmationModalTittle" [message]="confirmationModalMessage"
+    [hasComment]="confirmationModalHasComment" [hasOptions]="confirmationModalHasOptions"
+    [isCommentObligatory]="confirmationModalisCommentObligatory" [optionLabel]="confirmationModalOptionLabel"
+    [options]="confirmationModalOptions" (accept)="confirmationModalAccept($event.comment, $event.option)">
+  </app-confirmation-modal>
+</ng-template>
+
+<ng-template #planificacionModal let-modal>
+  <app-planificacion-modal [modalCategoria]="modal" [mode]="creationMode" [categoria]="planificacionSelected"
+    (createEdit)="refreshPlanificaciones()">
+  </app-planificacion-modal>
+</ng-template>
+<!--<div class="row section-periodo">
+    <div class="col field-div">
+        <label>Fecha Inicio Periodo Planificación:</label>
+        <input [readonly]="!editPlanificacion" type="text" [class]="'form-control' + (errors.inicioPeriodo ? ' error-border' : '')"
+            [value]="values.inicioPeriodo" (change)="cambiaFechaPlanificacion('fechainicio', $event.target.value)" maxlength="10" mask="d0/M0/0000"/>
+    </div>
+    <div class="col field-div">
+        <label>Fecha Fin Periodo Planificación:</label>
+        <input [readonly]="!editPlanificacion" type="text" [class]="'form-control' + (errors.finPeriodo ? ' error-border' : '')"
+            [value]="values.finPeriodo" (change)="cambiaFechaPlanificacion('fechafin', $event.target.value)" maxlength="10"  placeholder="dd/mm/yyyy" mask="d0/M0/0000"/>
+    </div>
+</div>
+<div class="container-usuarios">
+    <button type="button" class="btn accept-btn" (click)="editaFechaPlanificacion()">Cambiar Periodo
+        Planificación</button>
+    <button [disabled] ="!canSave" type="button" class="btn accept-btn" (click)="save()">Guardar</button>
+</div>
+<div *ngIf="errors.diferenciaPeriodo">
+    <label class="error-message">Fecha inicio debe ser inferior a fecha final</label>
+</div>-->

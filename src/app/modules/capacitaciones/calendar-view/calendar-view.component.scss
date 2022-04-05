@@ -1,0 +1,50 @@
+.calendar-view {
+  text-align: center;
+
+  .months-row {
+    margin-top: 10px;
+  }
+}
+.text-calendar{
+  text-align: left;
+  margin: 20px 0px 30px 30px;
+  color: #003770;
+  text-transform: capitalize;
+  font-family: 'Lato', sans-serif;
+}
+
+.btns-calendar{
+  font-family: 'Lato', sans-serif;
+  margin: 20px 0px 30px 30px;
+}
+
+.text-btns-calendar{
+  font-family: 'Lato', sans-serif;
+  font-size: 12px;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #003770;
+  border-color: #003770;
+}
+.btn-primary:hover {
+  color: #003770;
+  background-color: #ffdd00;
+  border-color: #003770;
+}
+
+.btn-outline-secondary {
+  color: #003770;
+  border-color: #003770;
+}
+.btn-outline-secondary:hover {
+  background-color: #ffdd00;
+}
+
+.cal-cell-row, .cal-header, .ng-star-inserted{
+  color: #003770;
+  text-transform: capitalize;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+}

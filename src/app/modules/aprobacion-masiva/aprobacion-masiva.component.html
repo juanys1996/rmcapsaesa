@@ -1,0 +1,570 @@
+<div class="carga-masiva-section" style="margin: 20px;">
+  <div class="carga-masiva-header">
+    <h3>Aprobaci&oacute;n de Capacitaciones</h3>
+  </div>
+  <br />
+  <div class="row aprobacion-body">
+    <div class="col">
+      <label>Seleccione un A&ntilde;o: </label>
+    </div>
+    <div class="col">
+      <select [(ngModel)]="anioSelected" class="form-control" (change)="onAnioChange($event, false)">
+        <option *ngFor="let anio of listaAnio" [value]="anio">
+          {{ anio }}
+        </option>
+      </select>
+    </div>
+    <div class="col">
+      <label>Seleccione una Tipo de Capacitaci&oacute;n: </label>
+    </div>
+    <div class="col">
+      <select [(ngModel)]="tipoCapacitacionSelected" class="form-control" (change)="onTipoCapacitacionChange($event, false)">
+        <option value="plan"> Plan de Capacitaci&oacute;n</option>
+        <option value="reforzamiento"> Reforzamiento</option>
+      </select>
+    </div>
+  </div>
+  <div class="row aprobacion-body" *ngIf="rolid == 1 || rolid == 2" style="margin-top: 5px">
+    <div class="col">
+      <label *ngIf="empresaVisible">Seleccione una Empresa: </label>
+    </div>
+    <div class="col">
+      <select [(ngModel)]="empresaSelected" class="form-control" (change)="onEmpresaChange($event, false)" *ngIf="empresaVisible && rolid == 1">
+        <option *ngFor="let empresa of listaEmpresa" [value]="empresa">
+          {{ empresa }}
+        </option>
+      </select>
+    </div>
+    <div class="col">
+      <label *ngIf="estadoVisible && tipoCapacitacionSelected == 'plan'">Seleccione el Estado del Plan:</label>
+    </div>
+    <div class="col">
+      <select [(ngModel)]="estadoSelected" class="form-control" (change)="onEstadoChange($event, false)" *ngIf="estadoVisible && tipoCapacitacionSelected == 'plan'">
+        <option *ngFor="let estado of estados" [value]="estado">
+          {{ estado }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="row aprobacion-body" *ngIf="rolid == 3" style="margin-top: 5px">
+    <div class="col">
+      <label *ngIf="estadoVisible && tipoCapacitacionSelected == 'plan'">Seleccione el Estado del Plan:</label>
+    </div>
+    <div class="col">
+      <select [(ngModel)]="estadoSelected" class="form-control" (change)="onEstadoChange($event, false)" *ngIf="estadoVisible && tipoCapacitacionSelected == 'plan'">
+        <option *ngFor="let estado of estados" [value]="estado">
+          {{ estado }}
+        </option>
+      </select>
+    </div>
+    <div class="col"></div>
+    <div class="col"></div>
+  </div>
+  <div class="row aprobacion-body" style="margin-top: 5px">
+    <div class="col">
+      <label *ngIf="planVisible && rolid == 1 && tipoCapacitacionSelected == 'plan'">Seleccione un Plan de Capacitaci&oacute;n:
+      </label>
+    </div>
+    <div class="col">
+      <select [(ngModel)]="idPlanSelected" class="form-control" (change)="onPlanChange($event, false)" *ngIf="planVisible && rolid == 1 && tipoCapacitacionSelected == 'plan'">
+        <option value=0>Todos</option>
+        <option *ngFor="let plan of listaPlan" [value]="plan[0]">
+          {{plan[0]}}: {{plan[1]}} ({{plan[2]}})
+        </option>
+      </select>
+    </div>
+    <div class="col"></div>
+    <div class="col"></div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col">
+      <button *ngIf="habilitarBusqueda" class="buscar-button btn btn-info" (click)="buscarCapacitacionesFiltradas()">
+        Buscar Capacitaciones
+      </button>
+    </div>
+  </div>
+</div>
+<div id="divMensaje" class="alert alert-danger" role="alert" *ngIf="error">
+  {{ mensaje }}
+</div>
+<div id="divMensaje" class="alert alert-success" role="alert" *ngIf="exitoInsercion">
+  {{ mensaje }}
+</div>
+<div class="carga-masiva-section" *ngIf="habilitarTabla && habilitarRechazados">
+  <div class="accordion" id="accordionExample">
+    <div class="card ">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+            aria-expanded="true" aria-controls="collapseOne">
+            Observaciones - Planes Rechazados
+          </button>
+        </h5>
+      </div>
+
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="card-body">
+          <table class="table caption-top">
+            <thead>
+              <tr>
+                <th scope="col">Plan de Capacitaci&oacute;n</th>
+                <th scope="col">Observaci&oacute;n</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cap of listaRechazados" >
+                <td>{{cap[0]}}</td>
+                <td>{{cap[1]}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="carga-masiva-section" *ngIf="habilitarTabla && habilitarKpi">
+  <div class="indicators-section">
+    <div class="indicators-header">
+      <label>KPI De Cumplimiento</label>
+      <span (click)="collapseKPI()">
+        <img [src]="isKpiCollapsed ? 'assets/icons/add.svg' : 'assets/icons/minus.svg'" />
+      </span>
+    </div>
+    <div class="indicators-body" [ngbCollapse]="isKpiCollapsed">
+      <table class="table table-striped table-bordered">
+        <thead>
+          <th>Critero de Evaluaci&oacute;n</th>
+          <th>Cantidad M&iacute;nima Esperada</th>
+          <th>Cantidad Asignada en Plan</th>
+          <th>Cumple Criterio</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let kpi of listaKpi">
+            <td class="td-centered" *ngIf="kpi[1] != 'NA'">{{kpi[1]}}</td>
+            <td class="td-centered" *ngIf="kpi[1] == 'NA'">{{kpi[2]}}</td>
+            <td class="td-centered" >{{kpi[3]}}</td>
+            <td class="td-centered">{{kpi[4]}}</td>
+            <td class="td-centered" *ngIf="!evaluarCantidad(kpi[3], kpi[4])">El plan no posee la cantidad m&iacute;nima esperada</td>
+            <td class="td-centered" *ngIf="evaluarCantidad(kpi[3], kpi[4])">El plan posee la cantidad m&iacute;nimo esperada</td>
+          </tr>
+          <tr>
+            <td class="td-centered">Cantidad M&iacute;nima de Capacitaciones</td>
+            <td class="td-centered">{{cantidadMinimaCaps}}</td>
+            <td class="td-centered">{{ listaCapacitaciones?.length }}</td>
+            <td class="td-centered" *ngIf="cantidadMinimaCaps > listaCapacitaciones?.length">El plan no cumple con el m&iacute;nimo de capacitaciones esperado</td>
+            <td class="td-centered" *ngIf="cantidadMinimaCaps <= listaCapacitaciones?.length">El plan cumple con el m&iacute;nimo de capacitaciones esperado</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<form>
+  <div class="carga-masiva-section" *ngIf="habilitarTabla">
+    <button *ngIf="habilitarAprobacion && rolid == 1" class="buscar-button btn btn-info" (click)="openSm(content, 'aprobar')" >
+      Aprobar Plan
+    </button>
+    <button *ngIf="habilitarRechazo && rolid == 1" type="button" class="buscar-button btn btn-info" (click)="open(rechazoModal, null, null)">
+      Rechazar Plan
+    </button>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <input type="text" name="filterPost" class="form-control buscar" placeholder="Buscar..." [(ngModel)]="searchValue">
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th *ngIf="habilitarIconos">
+              
+            </th>
+            <th *ngIf="habilitarIconos">
+              Estado
+            </th>
+            <th (click)="sort('planCapacitacionId')">ID Plan
+              <span *ngIf="planIdHabilitado" [hidden]="reverse"><i class="fa fa-caret-down"></i></span>
+              <span *ngIf="planIdHabilitado" [hidden]="!reverse"><i class="fa fa-caret-up"></i></span>
+            </th>
+            <th (click)="sort('planCapacitacion')">Plan Capac.
+              <span *ngIf="planHabilitado" [hidden]="reverse "><i class="fa fa-caret-down"></i></span>
+              <span *ngIf="planHabilitado" [hidden]="!reverse"><i class="fa fa-caret-up"></i></span>
+            </th>
+            <th (click)="sort('name')">Capacitaci&oacute;n
+              <span *ngIf="capacitacionHabilitado" [hidden]="reverse "><i class="fa fa-caret-down"></i></span>
+              <span *ngIf="capacitacionHabilitado" [hidden]="!reverse && capacitacionHabilitado"><i
+                  class="fa fa-caret-up"></i></span>
+            </th>
+            <th (click)="sort('nombreContratista')">Empresa
+              <span *ngIf="contratistaHabilitado" [hidden]="reverse"><i class="fa fa-caret-down"></i></span>
+              <span *ngIf="contratistaHabilitado" [hidden]="!reverse"><i class="fa fa-caret-up"></i></span>
+            </th>
+            <th (click)="sort('zoneDescription')">Zona
+              <span *ngIf="zonaHabilitado" [hidden]="reverse"><i class="fa fa-caret-down"></i></span>
+              <span *ngIf="zonaHabilitado" [hidden]="!reverse"><i class="fa fa-caret-up"></i></span>
+            </th>
+            <th (click)="sort('categoryDescription')">Categoria
+              <span *ngIf="categoriaHabilitado" [hidden]="reverse"><i class="fa fa-caret-down"></i></span>
+              <span *ngIf="categoriaHabilitado" [hidden]="!reverse"><i class="fa fa-caret-up"></i></span>
+            </th>
+            <th (click)="sort('focoDescription')">Foco
+              <span *ngIf="focoHabilitado" [hidden]="reverse"><i class="fa fa-caret-down"></i></span>
+              <span *ngIf="focoHabilitado" [hidden]="!reverse"><i class="fa fa-caret-up"></i></span>
+            </th>
+            <th (click)="sort('enfoqueDescription')">Enfoque
+              <span *ngIf="enfoqueHabilitado" [hidden]="reverse"><i class="fa fa-caret-down"></i></span>
+              <span *ngIf="enfoqueHabilitado" [hidden]="!reverse"><i class="fa fa-caret-up"></i></span>
+            </th>
+            <th (click)="sort('ejecutorDescription')">Ejecutor
+              <span *ngIf="ejecutorHabilitado" [hidden]="reverse"><i class="fa fa-caret-down"></i></span>
+              <span *ngIf="ejecutorHabilitado" [hidden]="!reverse"><i class="fa fa-caret-up"></i></span>
+            </th>
+            <th (click)="sort('fecha')">Fecha Capac.
+              <span *ngIf="fechaHabilitado" [hidden]="reverse"><i class="fa fa-caret-down"></i></span>
+              <span *ngIf="fechaHabilitado" [hidden]="!reverse"><i class="fa fa-caret-up"></i></span>
+            </th>
+            <th *ngIf="habilitarAcciones">
+              Acciones
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cap of listaCapacitaciones | orderBy : orderHeader : reverse | searchfilter : searchValue | paginate: {itemsPerPage : 10, currentPage: pageActual}">
+            <td *ngIf="habilitarIconos">
+              <i *ngIf="cap.compareDate == 0 && cap.stateShortDescription == 'Abierta'" class="fas fa-exclamation"></i>
+              <i *ngIf="((cap.compareDate < 0 && cap.stateShortDescription == 'Abierta') || (cap.stateShortDescription == 'Cerrada' || cap.stateShortDescription == 'Cerrada con Retraso'))" class="fas fa-check"></i>
+              <i *ngIf="((cap.compareDate > 0 && cap.stateShortDescription == 'Abierta') || cap.stateShortDescription == 'Cancelada')" class="fas fa-times"></i>
+            </td>
+            <td *ngIf="habilitarIconos">
+              <i *ngIf="cap.stateShortDescription == 'Abierta'" class="fas fa-lock-open"></i>
+              <i *ngIf="cap.stateShortDescription != 'Abierta'" class="fas fa-lock"></i>
+            </td>
+            <td>{{ cap.planCapacitacionId }}</td>
+            <td>{{ cap.planCapacitacion }}</td>
+            <td>{{ cap.name }}</td>
+            <td>{{ cap.nombreContratista }}</td>
+            <td>{{ cap.zoneDescription }}</td>
+            <td>{{ cap.categoryDescription }}</td>
+            <td>{{ cap.focoDescription }}</td>
+            <td>{{ cap.enfoqueDescription }}</td>
+            <td>{{ cap.ejecutorDescription }}</td>
+            <td>{{ cap.fecha }}</td>
+            <td *ngIf="habilitarAcciones && cap.stateShortDescription == 'Abierta'" style="padding: 0%;">
+              <button type="button" class="btn btn-primary" (click)="open(modalAprobacion, 'aprobacion', cap)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button type="button" class="btn btn-danger" (click)="open(cancelModal, 'cancel', cap)">
+                <i class="fas fa-calendar-times"></i>
+              </button>
+            </td>
+            <td *ngIf="habilitarAcciones && (cap.stateShortDescription == 'Cerrada' || cap.stateShortDescription == 'Cerrada con Retraso')" style="padding: 0%;">
+              <button type="button" class="btn btn-success" (click)="open(evidenciasModal, 'evidencia', cap.capacitacionId)">
+                <i class="fa fa-search"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination-controls (pageChange)="pageActual = $event" class="pagination"></pagination-controls>
+    </div>
+    <!-- Modal -->
+    <ng-template #evidenciasModal let-modal class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLabel">
+            Evidencia(s) Adjuntas
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <table class="table caption-top">
+              <thead>
+                <tr>
+                  <th scope="col">Adjuntos</th>
+                  <th scope="col">Acci&oacute;n</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let adjunto of listAdjuntos">
+                  <td>{{adjunto}}</td>
+                  <td>
+                    <button type="button" class="btn btn-secondary" (click)="descargar(adjunto)">
+                      <i class="fa fa-download"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </ng-template>
+    <!-- Modal -->
+    <ng-template #rechazoModal let-modal class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLabel">
+            Confirmaci&oacute;n del Rechazo del Plan
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div id="divMensajeRechazo" class="alert alert-danger" role="alert" *ngIf="errorModal">
+            {{ mensaje }}
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group">
+              <label>Motivo del rechazo:</label>
+              <br>
+            <div style="width: 100%;">
+              <textarea style="resize: none;" (change)="changeInput('rechazo',$event.target.value)" maxlength="100" class="form-control"
+                required></textarea>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')">
+            Cancelar
+          </button>
+          <button type="button" (click)="openSm(content, 'rechazar', rechazoModal)" class="btn btn-primary" data-dismiss="modal">
+            Rechazar Plan
+          </button>
+        </div>
+      </div>
+    </ng-template>
+    <!-- Modal -->
+    <ng-template #cancelModal let-modal>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="cancelModalLabel">
+            Confirmaci&oacute;n de la Cancelaci&oacute;n de la Capacitaci&oacute;n
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div id="divMensajeCancelacion" class="alert alert-danger" role="alert" *ngIf="errorModal">
+            {{ mensaje }}
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group">
+              <label>Motivo de la cancelaci&oacute;n :</label>
+              <div style="width: 100%;">
+                <textarea style="resize: none;" (change)="changeInput('cancelacion',$event.target.value)" maxlength="100" class="form-control"
+                required></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')">
+            Cerrar
+          </button>
+          <button type="button" (click)="openSm(content, 'cancelacion', cancelModal)" class="btn btn-primary">
+            Cancelar Capacitaci&oacute;n
+          </button>
+        </div>
+      </div>
+    </ng-template>
+    <!-- Modal Añadir Capacitacion -->
+    <ng-template #modalAprobacion let-modal class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel">
+              Capacitaci&oacute;n - {{modNombreCapacitacion}}
+            </h4>            
+          </div>
+          <div class="modal-body">
+            <div id="divMensajeActualizacion" class="alert alert-danger" role="alert" *ngIf="errorModal">
+              {{ mensaje }}
+            </div>
+            <div class="row">
+              <div class="col">
+                <label>Plan Capacitacion: </label>
+              </div>
+              <div class="col">
+                <p class="text-area">{{modPlanCapacitacion}} ({{modIdPlan}}) </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label>Empresa: </label>
+              </div>
+              <div class="col">
+                <p class="text-area">{{modNombreContratista}} </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label>Zona: </label>
+              </div>
+              <div class="col">
+                <p class="text-area">{{modZona}}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label>Categoria: </label>
+              </div>
+              <div class="col">
+                <p class="text-area">{{modCategoria}} </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label>Foco: </label>
+              </div>
+              <div class="col">
+                <p class="text-area">{{modFoco}} </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label>Enfoque: </label>
+              </div>
+              <div class="col">
+                <p class="text-area">{{modEnfoque}} </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label>Ejecutor: </label>
+              </div>
+              <div class="col">
+                <p class="text-area">{{modEjecutor}} </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label>Fecha de Realizaci&oacute;n: </label>
+              </div>
+              <div class="col">
+                <div class="input-group">
+                  <input class="form-control" (click)="d.toggle()" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label>HH Reales de la Capac.: </label>
+              </div>
+              <div class="col">
+                <div class="input-group input-group-sm mb-3">
+                  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                  (change)="changeInput('horaCapacitacion', $event.target.value)" />
+                </div>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <div class="col" *ngFor="let evidence of evidences">
+                <div class="row">
+                  <div class="col-2">
+                    <img [src]="calculeSvgIcon(evidence.nombreArchivo)" style="width: 20px;" class="img-responsive">
+                  </div>
+                  <div class="col-8" style="text-align: center;">
+                    <label class="observation-label text-left" style="cursor: pointer;" [ngbTooltip]="Descargar"
+                      (click)="downloadFile(evidence.id, evidence.nombreArchivo)">{{evidence.nombreArchivo}}</label>
+                  </div>
+                  <div class="col-2" style="text-align: right;">
+                    <span class="active" (click)="deleteFile(evidence.id)" [ngbTooltip]="Eliminar">
+                      <img class="img-responsive" src='assets/icons/trashcan.svg' />
+                    </span>
+                  </div>
+                </div>
+                <hr>
+              </div>
+              <div class="container">
+                <form #formDirective="ngForm" [formGroup]="form" >
+                  <div class="form-group">
+                    <input #archivo type="file" (change)="uploadFile($event, formDirective, archivo)">
+                  </div>
+                </form>
+              </div>
+              <div>
+                <label *ngIf="canAssignWorkers()" class="observation-label">Asistentes:</label>
+                <button *ngIf="canAssignWorkers()" type="button" class="btn cancel-btn"
+                  (click)="openPronexoModal(pronexoUsersModal)">Asignar trabajadores</button>
+                <div class="col-12 text-center" *ngIf="this.realAssistance == 0">
+                  -
+                </div>
+                <table *ngIf="this.realAssistance > 0" class="table table-striped tableAssistants">
+                  <thead>
+                    <th *ngIf="canAssignWorkers()">
+                      Desasignar</th>
+                    <th *ngFor="let column of workersColumns">
+                      {{column}}
+                    </th>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of workersRows" [id]="row.id">
+                      <td *ngIf="canAssignWorkers()" class="td-centered">
+                        <span class="active" (click)="removeWorker(row.worker)" [ngbTooltip]="'Desasignar'">
+                          <img src="assets/icons/minus.svg" />
+                        </span>
+                      </td>
+                      <ng-container *ngFor="let cell of row.cells">
+                        <span *ngIf="cell.tooltip">
+                          <td [class]="cell.class" [ngbTooltip]="cell.content" placement="left">
+                            {{cell.content}}
+                          </td>
+                        </span>
+                        <td *ngIf="!cell.tooltip" [class]="cell.class">
+                          {{cell.content}}
+                        </td>
+                      </ng-container>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">
+              Cancelar
+            </button>
+            <button type="button" (click)="openSm(content, 'actualizacion', modalAprobacion)" class="btn btn-primary" >
+              Guardar y Cerrar Capacitaci&oacute;n
+            </button>
+          </div>
+        </div>
+    </ng-template>
+  </div>
+</form>
+
+<ng-template #pronexoUsersModal let-modal>
+  <app-pronexo-workers-modal [modal]="modal" [workersIdSelected]="workersIdSelected" [workersSelected]="workersSelected"
+    (workersChange)="onWorkersSelectedChange($event.workersIdSelected, $event.workersSelected)" [planCapacitacion]="capacitacionSelected">
+  </app-pronexo-workers-modal>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h3 class="modal-title">Confirmaci&oacute;n</h3>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="accion == 'actualizacion'">
+    <p>¿Est&aacute; seguro de guardar la informaci&oacute;n ingresada? Los cambios realizados no podr&aacute;n ser revertidos.</p>
+  </div>
+  <div class="modal-body" *ngIf="accion == 'cancelacion'">
+    <p>¿Est&aacute; seguro de guardar la informaci&oacute;n ingresada? Los cambios realizados no podr&aacute;n ser revertidos.</p>
+  </div>
+  <div class="modal-body" *ngIf="accion == 'rechazar'">
+    <p>¿Est&aacute; seguro que desea rechazar el plan de capacitaci&oacute;n? Los cambios realizados no podr&aacute;n ser revertidos.</p>
+  </div>
+  <div class="modal-body" *ngIf="accion == 'aprobar'">
+    <p>¿Est&aacute; seguro que desea aprobar el plan de capacitaci&oacute;n? Los cambios realizados no podr&aacute;n ser revertidos.</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Cerrar</button>
+    <button type="button" class="btn btn-primary" (click)="ejecutarAccion()">Continuar</button>
+  </div>
+</ng-template>

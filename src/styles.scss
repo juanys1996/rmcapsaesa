@@ -1,0 +1,17 @@
+@import "~bootstrap/scss/bootstrap";
+// regular style toast
+@import "~ngx-toastr/toastr";
+//style ng-select
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~open-iconic/font/css/open-iconic-bootstrap.css';
+
+
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+html {
+    height: 100%;
+}

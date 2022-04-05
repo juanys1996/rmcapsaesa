@@ -1,0 +1,317 @@
+<div class="capacitacion-modal">
+  <div class="header">
+    <h3 *ngIf="mode == 'planificar'">Planificar Capacitación</h3>
+    <h3 *ngIf="mode == 'reforzamiento'">Reforzar Capacitación</h3>
+    <h3 *ngIf="mode == 'edit'">Editar Capacitación</h3>
+    <h3 *ngIf="mode == 'read'">Capacitación</h3>
+  </div>
+  <div class="body row">
+    <div class="col fields-left">
+      <div class="field-div">
+        <label *ngIf="errors.name" class="error">(*)</label>
+        <label *ngIf="!isRead">Nombre:</label>
+        <label *ngIf="isRead">Nombre:</label>
+        <label class="value-label" *ngIf="isRead" placement="left"
+          [ngbTooltip]="capacitacion.name">{{capacitacion.name}}</label>
+        <input *ngIf="!isRead" type="text" [class]="'form-control' + (errors.name ? ' error-border' : '')"
+          [value]="capacitacion.name" (change)="changeInput('name', $event.target.value)" />
+      </div>
+
+      <div class="field-div">
+        <label *ngIf="errors.categoryId" class="error">(*)</label>
+        <label *ngIf="!isRead">Categoría:</label>
+        <label *ngIf="isRead">Categoría:</label>
+        <label class="value-label" *ngIf="isRead" placement="left"
+          [ngbTooltip]="capacitacion.categoryDescription">{{capacitacion.categoryDescription}}</label>
+        <select *ngIf="!isRead" [class]="'form-control' + (errors.categoryId ? ' error-border' : '')"
+          [value]="capacitacion.categoryId" (change)="changeInput('categoryId', $event.target.value, 'number')">
+          <option value="-1">Elegir</option>
+          <option *ngFor="let category of categoriesWithFocos" [value]="category.categoryId">
+            {{category.categoryDescription}}</option>
+        </select>
+      </div>
+
+      <div class="field-div">
+        <label *ngIf="errors.focoId" class="error">(*)</label>
+        <label *ngIf="!isRead">Foco:</label>
+        <label *ngIf="isRead">Foco:</label>
+        <label class="value-label" *ngIf="isRead" placement="left"
+          [ngbTooltip]="capacitacion.focoDescription">{{capacitacion.focoDescription}}</label>
+        <select *ngIf="!isRead" [class]="'form-control' + (errors.focoId ? ' error-border' : '')"
+          [value]="capacitacion.focoId" (change)="changeInput('focoId', $event.target.value, '')">
+          <option value="-1">Elegir</option>
+          <option *ngFor="let foco of focoCombo" [value]="foco.focoId">{{foco.focoDescription}}</option>
+        </select>
+      </div>
+
+      <div class="field-div">
+        <label *ngIf="errors.enfoqueId" class="error">(*)</label>
+        <label *ngIf="!isRead">Enfoque:</label>
+        <label *ngIf="isRead">Enfoque:</label>
+        <label class="value-label" *ngIf="isRead">{{capacitacion.enfoqueDescription}}</label>
+        <select *ngIf="!isRead" [class]="'form-control' + (errors.enfoqueId ? ' error-border' : '')"
+          [value]="capacitacion.enfoqueId" (change)="changeInput('enfoqueId', $event.target.value, '')">
+          <option value="-1">Elegir</option>
+          <option *ngFor="let enfoque of enfoques" [value]="enfoque.enfoqueId">{{enfoque.enfoqueDescription}}</option>
+        </select>
+      </div>
+
+      <div class="field-div">
+        <label *ngIf="errors.zoneId" class="error">(*)</label>
+        <label *ngIf="!isRead">Zona:</label>
+        <label *ngIf="isRead">Zona:</label>
+        <label class="value-label" *ngIf="isRead">{{getZoneLabel(capacitacion.zone)}}</label>
+        <label class="value-label" *ngIf="flagZona">{{zonas[0].descripcion}}</label>
+        <select *ngIf="!isRead && !flagZona" [class]="'form-control' + (errors.zoneId ? ' error-border' : '')"
+          [value]="capacitacion.zone" (change)="changeInput('zoneId', $event.target.value, 'number')">
+          <option value="-1">Elegir</option>
+          <option *ngFor="let zone of zonas" [value]="zone.zoneId">{{zone.descripcion}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="col fields-right">
+
+      <div class="field-div">
+        <label *ngIf="errors.ejecutorId" class="error">(*)</label>
+        <label *ngIf="!isRead">Ejecutor:</label>
+        <label *ngIf="isRead">Ejecutor:</label>
+        <label class="value-label" *ngIf="this.mode == 'read'">{{capacitacion.ejecutorDescription}}</label>
+        <select *ngIf="!isRead || flags.ejecutor" [class]="'form-control' + (errors.ejecutorId ? ' error-border' : '')"
+          [value]="capacitacion.ejecutorId" (change)="changeInput('ejecutorId', $event.target.value, 'number')">
+          <option value="-1">Elegir</option>
+          <option *ngFor="let ejecutor of ejecutoresWithRelatores" [value]="ejecutor.ejecutorId">
+            {{ejecutor.ejecutorDescription}}</option>
+        </select>
+      </div>
+
+      <div class="field-div" *ngIf="capacitacion.ejecutorId == ejecutorOthersId">
+        <label *ngIf="errors.ejecutorOthers" class="error">(*)</label>
+        <label>Nombre ejecutor:</label>
+        <label class="value-label" *ngIf="this.mode == 'read'">{{getLabel(capacitacion.ejecutorOthers, '-')}}</label>
+        <input maxlength="100" *ngIf="!isRead || flags.ejecutor" type="text"
+          [class]="'form-control' + (errors.ejecutorOthers ? ' error-border' : '')"
+          [value]="capacitacion.ejecutorOthers" (change)="changeInput('ejecutorOthers', $event.target.value)" />
+      </div>
+
+      <!-- Relator -->
+      <div class="field-div">
+        <label *ngIf="errors.relatorId" class="error">(*)</label>
+        <label *ngIf="!isRead">Relator:</label>
+        <label *ngIf="isRead">Relator:</label>
+        <label class="value-label" *ngIf="this.mode == 'read'">{{capacitacion.relatorDescription}}</label>
+        <select *ngIf="!isRead || flags.relator" [class]="'form-control' + (errors.relatorId ? ' error-border' : '')"
+          [value]="capacitacion.relatorId" (change)="changeInput('relatorId', $event.target.value, 'number')">
+          <option value="-1">Elegir</option>
+          <option *ngFor="let relator of relatorCombo" [value]="relator.relatorId">{{relator.relatorDescription}}
+          </option>
+        </select>
+      </div>
+
+      <div class="field-div">
+        <label *ngIf="errors.fechaCapacitacion" class="error">(*)</label>
+        <label>Fecha Capacitaci&oacute;n:</label>
+        <label class="value-label" *ngIf="isRead">{{getLabel(capacitacion.realHours, '0') + 'hs'}}</label>
+        <input [class]="'form-control' + (errors.fechaCapacitacion ? ' error-border' : '')" (click)="d.toggle()" placeholder="dd-mm-yyyy" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker"/>
+    
+      </div>
+
+      <div class="field-div">
+        <label>Duración real:</label>
+        <label *ngIf="errors.realHours" class="error">Mayor a 0</label>
+        <label class="value-label" *ngIf="isRead">{{getLabel(capacitacion.realHours, '0') + 'hs'}}</label>
+        <input *ngIf="!isRead || flags.duracionReal" type="number" min="0"
+          [class]="'form-control number-input' + (errors.realHours ? ' error-border' : '')"
+          [value]="capacitacion.realHours" placeholder="horas"
+          (change)="changeInput('realHours', $event.target.value, 'number')" />
+      </div>
+
+
+      <div *ngIf="mode == 'planificar'" class="field-div">
+        <label *ngIf="errors.estimatedAssistants" class="error">(*)</label>
+        <label *ngIf="!isRead">Asistentes estimados:</label>
+        <label *ngIf="isRead">Asistentes estimados:</label>
+        <label class="value-label" *ngIf="isRead">{{capacitacion.estimatedAssistants}}</label>
+        <input *ngIf="!isRead" type="number" min="1" max="9999"
+          [class]="'form-control number-input' + (errors.estimatedAssistants ? ' error-border' : '')"
+          [value]="capacitacion.estimatedAssistants"
+          (change)="changeInput('estimatedAssistants', $event.target.value, 'number')" />
+      </div>
+
+      <div class="field-div" *ngIf="(mode == 'edit' || isRead) ">
+        <label>Asistentes reales:</label>
+        <label *ngIf="errors.realAssistants" class="error">Mayor a 0 y hasta 4 digitos</label>
+        <label class="value-label" *ngIf="isRead">{{getLabel(capacitacion.realAssistants, '-')}}</label>
+        <label class="value-label" *ngIf="!isRead">{{workersRows.length}}</label>
+      </div>
+
+      <div class="field-div" *ngIf="(mode == 'edit' || isRead) && capacitacion.capacitacionTypeId == 1">
+        <label>Fecha de ejecución real:</label>
+        <label *ngIf="mode == 'edit' && errors.realExecutionDate"
+          class="error">{{realExecutionDateErrorMessage}}</label>
+        <label class="value-label" *ngIf="isRead">{{getLabel(capacitacion.realExecutionDate, '-')}}</label>
+        <input *ngIf="mode == 'edit' || flags.fechaEjecucionReal" type="text"
+          [class]="'form-control date-input' + (errors.realExecutionDate ? ' error-border' : '')"
+          [value]="capacitacion.realExecutionDate" placeholder="dd/mm/yyyy" mask="d0/M0/0000"
+          (change)="changeInput('realExecutionDate', $event.target.value)" />
+      </div>
+    </div>
+
+  <!-- CITA -->
+  <div *ngIf="!isRead" class="float-right">
+    <label class="indication-label">(*) Campo obligatorio</label>
+  </div>
+
+    <!-- Evidencia -->
+    <label class="observation-label"
+      *ngIf="capacitacion.capacitacionId || capacitacion.capacitacionTypeId == 2">Evidencia:</label>
+
+    <div class="container"
+      *ngIf="((!isRead || flags.Evidencia) && capacitacion.capacitacionId) || mode == 'reforzamiento'">
+        <form #formDirective="ngForm" [formGroup]="form" class="row">
+        <div class="col-6 text-modal">
+          <input #archivo type="file" (change)="uploadFile($event, formDirective, archivo)">
+        </div>
+
+      </form>
+      <label *ngIf="error" class="error-message">{{errorMessage}}</label>
+    </div>
+    
+    <div [class]="'row ml-2 mr-2' + (listClass ? ' anyClass' : '')" *ngIf="capacitacion.capacitacionId || uuid">
+      <!-- <select *ngIf="!isRead" [class]="'form-control' + (errors.zoneId ? ' error-border' : '')" -->
+
+      <div class="col-6" *ngIf="evidences.length == 0">
+        -
+      </div>
+      <!-- <label *ngIf="errors.realEvidence" class="error">Debe registrar evidencia</label> -->
+      <div>
+        <label *ngIf="errors.realEvidence" class="error-message">Debe registrar evidencia.</label>
+      </div>
+
+      <div class="col-12" *ngFor="let evidence of evidences">
+        <div class="row">
+          <div class="col-2">
+            <img [src]="calculeSvgIcon(evidence.nombreArchivo)" style="width: 20px;" class="img-responsive">
+          </div>
+          <div class="col-8">
+            <label class="observation-label text-left" style="cursor: pointer;" [ngbTooltip]="Descargar"
+              (click)="downloadFile(evidence.id, evidence.nombreArchivo)">{{evidence.nombreArchivo}}</label>
+          </div>
+          <div class="col-2" *ngIf="!isRead">
+            <span class="active" (click)="deleteFile(evidence.id)" [ngbTooltip]="Eliminar">
+              <img class="img-responsive" src='assets/icons/trashcan.svg' />
+            </span>
+          </div>
+        </div>
+        <hr>
+      </div>
+    </div>
+
+
+    <p class="observation-label">Observación:</p>
+    <label *ngIf="errors.observation" class="error">Menor a 500 caracteres</label>
+    <label class="value-label observation-text" *ngIf="isRead" placement="left"
+      [ngbTooltip]="capacitacion.observation">{{getLabel(capacitacion.observation, '-')}}</label>
+    <input *ngIf="!isRead" type="text"
+      [class]="'form-control observation-input' + (errors.observation ? ' error-border' : '')"
+      [value]="capacitacion.observation" (change)="changeInput('observation', $event.target.value)" />
+
+    <div>
+      <label *ngIf="showErrorMessage" class="error-message">Error al guardar.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.ejecutorOthers" class="error-message">Campo Nombre ejecutor es obligatorio y menor a 100
+        caracteres.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.name" class="error-message">Campo Nombre es obligatorio y menor a 100 caracteres.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.estimatedAssistants" class="error-message">Campo Asistentes es obligatorio mayor a 0 y
+        menor
+        a 10.000.</label>
+    </div>
+
+
+    <p *ngIf="canAssignWorkers()" class="observation-label" style="margin-top: 5px;">Asistentes:</p>
+    <button *ngIf="canAssignWorkers() || flags.AsignacionParticipantes" type="button" class="btn btn-asistentes"
+      (click)="openPronexoModal(pronexoUsersModal)">Asignar trabajadores</button>
+
+    <!-- <div class="col-12 text-center" *ngIf="this.capacitacion.realAssistants == 0">
+      -
+    </div> -->
+    <table *ngIf="this.capacitacion.realAssistants > 0" class="table table-striped tableAssistants">
+      <thead>
+        <th *ngIf="canAssignWorkers() || flags.AsignacionParticipantes">
+          Desasignar</th>
+        <th *ngFor="let column of workersColumns">
+          {{column}}
+        </th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of workersRows" [id]="row.id">
+          <td *ngIf="canAssignWorkers() || flags.AsignacionParticipantes" class="td-centered">
+            <span class="active" (click)="removeWorker(row.worker)" [ngbTooltip]="'Desasignar'">
+              <img src="assets/icons/minus.svg" />
+            </span>
+          </td>
+          <ng-container *ngFor="let cell of row.cells">
+            <span *ngIf="cell.tooltip">
+              <td [class]="cell.class" [ngbTooltip]="cell.content" placement="left">
+                {{cell.content}}
+              </td>
+            </span>
+            <td *ngIf="!cell.tooltip" [class]="cell.class">
+              {{cell.content}}
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!isRead || flags.Guardar" class="footer">
+    <button type="button" class="btn cancel-btn" (click)="modal.dismiss('Cancel')">Cancelar</button>
+
+    <button type="button" class="btn accept-btn" (click)="onSave()">Guardar</button>
+    <!--<button *ngIf="mode == 'reforzamiento'" type="button" class="btn accept-btn" (click)="onSave(true)">Crear y
+      Cerrar</button>
+    <span *ngIf="mode == 'planificar' && rolid== 3" [class]="active" (click)="saveAndSend(confirmationModal)">
+      <img [src]="'assets/icons/send.svg'" />
+    </span>-->
+    <span *ngIf="mode == 'edit'" [class]="isIconActiveSend(capacitacion) ? 'active' : 'disabled'"
+      (click)="openSendForAcceptanceModal(confirmationModal)">
+      <img [src]="isIconActiveSend(capacitacion) ? 'assets/icons/send.svg' : 'assets/icons/send_disabled.svg'" />
+    </span>
+  </div>
+
+  <div *ngIf="showBar" class="footer-read">
+    <!-- <button type="button" class="btn cancel-btn" (click)="modal.dismiss('Cancel')">Cerrar</button> -->
+    <span [class]="isIconActiveReject(capacitacion) ? 'active' : 'disabled'"
+      (click)="openRejectModal(confirmationModal)">
+      <img [src]="isIconActiveReject(capacitacion) ? 'assets/icons/cross.svg' : 'assets/icons/cross_disabled.svg'" />
+    </span>
+    <span [class]="isIconActiveAccept(capacitacion) ? 'active' : 'disabled'"
+      (click)="openAcceptModal(confirmationModal)">
+      <img [src]="isIconActiveAccept(capacitacion) ? 'assets/icons/check.svg' : 'assets/icons/check_disabled.svg'" />
+    </span>
+  </div>
+
+  <div *ngIf="isRead" class="footer-read">
+    <button type="button" class="btn cancel-btn" (click)="modal.dismiss('Cancel')">Cerrar</button>
+  </div>
+</div>
+
+<ng-template #confirmationModal let-modal>
+  <app-confirmation-modal [modal]="modal" [tittle]="confirmationModalTittle" [message]="confirmationModalMessage"
+    [hasComment]="confirmationModalHasComment" [hasOptions]="confirmationModalHasOptions"
+    [optionLabel]="confirmationModalOptionLabel" [options]="confirmationModalOptions"
+    [isCommentObligatory]="confirmationModalisCommentObligatory"
+    (accept)="confirmationModalAccept($event.comment, $event.option)"></app-confirmation-modal>
+</ng-template>
+
+<ng-template #pronexoUsersModal let-modal>
+  <app-pronexo-workers-modal [modal]="modal" [workersIdSelected]="workersIdSelected" [workersSelected]="workersSelected"
+    (workersChange)="onWorkersSelectedChange($event.workersIdSelected, $event.workersSelected)">
+  </app-pronexo-workers-modal>
+</ng-template>

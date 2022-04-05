@@ -1,0 +1,162 @@
+<!--Vista Mantenedor-->
+<div *ngIf="rolid == 1" [ngClass]="visible ? 'container-usuarios' : 'container-usuarios-invisible'">
+  <ul class="nav nav-tabs">
+    <li class="nav-item"><a (click)="tablaUsuarios()" class="laber-usuarios cursor nav-link">Usuarios</a></li>
+    <li class="nav-item"><a (click)="tablaZonas()" class="laber-usuarios cursor nav-link"> Zonas</a></li>
+    <li class="nav-item"><a (click)="tablaCategorias()" class="laber-usuarios cursor nav-link"> Categorías</a></li>
+    <li class="nav-item"><a (click)="tablaEnfoques()" class="laber-usuarios cursor nav-link"> Enfoques</a></li>
+    <li class="nav-item"><a (click)="tablaEjecutores()" class="laber-usuarios cursor nav-link"> Ejecutores</a></li>
+    <li class="nav-item"><a (click)="tablaFocos()" class="laber-usuarios cursor nav-link"> Focos</a></li>
+    <li class="nav-item"><a (click)="tablaRelatores()" class="laber-usuarios cursor nav-link"> Relatores</a></li>
+    <li class="nav-item"><a (click)="tablaPlanificacion()" class="laber-usuarios cursor nav-link"> Periodo Plan</a></li>
+  </ul>
+  <div [ngClass]="flagUsuarios ? 'container-usuarios' : 'container-usuarios-invisible'">
+    <button type="button" class="btn accept-btn" (click)="onCreate(userModal,'Crear',usuario)">Nuevo
+      Usuario</button>
+  </div>
+  <div [ngClass]="flagZonas ? 'container-usuarios' : 'container-usuarios-invisible'">
+    <button type="button" class="btn accept-btn" (click)="onCreateZona(zonaModal,'Crear',zona)">Nueva
+      Zona</button>
+  </div>
+  <div [ngClass]="flagCategorias ? 'container-usuarios' : 'container-usuarios-invisible'">
+    <button type="button" class="btn accept-btn" (click)="onCreateCategoria(categoriaModal,'Crear',categoria)">Nueva
+      Categoría</button>
+  </div>
+  <div [ngClass]="flagEnfoques ? 'container-usuarios' : 'container-usuarios-invisible'">
+    <button type="button" class="btn accept-btn" (click)="onCreateEnfoque(enfoqueModal,'Crear',enfoque)">Nuevo
+      Enfoque</button>
+  </div>
+  <div [ngClass]="flagEjecutores ? 'container-usuarios' : 'container-usuarios-invisible'">
+    <button type="button" class="btn accept-btn" (click)="onCreateEjecutor(ejecutorModal,'Crear',ejecutor)">Nuevo
+      Ejecutor</button>
+  </div>
+  <div [ngClass]="flagFocos ? 'container-usuarios' : 'container-usuarios-invisible'">
+    <button type="button" class="btn accept-btn" (click)="onCreateFoco(focoModal,'Crear',foco)">Nuevo
+      Foco</button>
+  </div>
+  <div [ngClass]="flagRelatores ? 'container-usuarios' : 'container-usuarios-invisible'">
+    <button type="button" class="btn accept-btn" (click)="onCreateRelator(relatorModal,'Crear',relator)">Nuevo
+      Relator</button>
+  </div>
+  <div [ngClass]="flagPlanificacion ? 'container-usuarios' : 'container-usuarios-invisible'">
+    <button type="button" class="btn accept-btn" (click)="onCreatePlanificacion(planificacionModal,'Crear',planificacion)">Nuevo
+      Periodo</button>
+  </div>
+  <div [ngClass]="flagUsuarios ? 'container-usuarios' : 'container-usuarios-invisible'">
+    <div *ngIf="loadingUsuarios" class="spinner-border spinner" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <!--<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggerUsuario"
+      class="table table-striped table-responsive">-->
+    <table datatable [dtTrigger]="dtTriggerUsuario" class="table table-striped table-responsive">
+      <thead>
+        <tr>
+          <th>Acciones</th>
+          <th>Rol</th>
+          <th>Nombre Usuario</th>
+          <th>Email</th>
+          <th>Zona</th>
+          <th>Rut</th>
+          <th>Nombre</th>
+          <th>Estado</th>
+          <th>Empresa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios | paginate: {itemsPerPage : 10, currentPage: pageActual}">
+          <td class="td-centered">
+            <span (click)="onCreate(userModal,'Editar', usuario.usuario)" [ngbTooltip]="'Editar'">
+              <img [src]="'assets/icons/pencil.svg'" />
+            </span>
+            <span (click)="openDeleteModalUsuario(confirmationModal, usuario.usuario)" [ngbTooltip]="'Deshabilitar'">
+              <img [src]="'assets/icons/trashcan.svg'" />
+            </span>
+          </td>
+          <td class="td-centered">{{getRolLabel(usuario.usuario.roleId)}}</td>
+          <td class="td-centered">{{usuario.usuario.username}}</td>
+          <td class="td-centered">{{usuario.usuario.email}}</td>
+          <td class="td-centered td-truncated">
+            {{getLabelZonas(usuario.zonas)}}</td>
+          <td class="td-centered">{{usuario.usuario.rutTrabajador}}</td>
+          <td class="td-centered">{{usuario.usuario.nombreTrabajador}} {{usuario.usuario.apellidoPaterno}} {{usuario.usuario.apellidoMaterno}}</td>
+          <td class="td-centered">{{getEstadoLabel(usuario.usuario.status)}}</td>
+          <td class="td-centered">{{usuario.usuario.nombreContratista}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="pageActual = $event" class="pagination"></pagination-controls>
+  </div>
+  <div>
+    <app-table-zona *ngIf="flagZonas"></app-table-zona>
+  </div>
+  <div>
+    <app-table-categoria *ngIf="flagCategorias"></app-table-categoria>
+  </div>
+  <div>
+    <app-table-enfoque *ngIf="flagEnfoques"></app-table-enfoque>
+  </div>
+  <div>
+    <app-table-ejecutor *ngIf="flagEjecutores"></app-table-ejecutor>
+  </div>
+  <div>
+    <app-table-foco *ngIf="flagFocos"></app-table-foco>
+  </div>
+  <div>
+    <app-table-relator *ngIf="flagRelatores"></app-table-relator>
+  </div>
+  <div>
+    <app-periodo-planificacion *ngIf="flagPlanificacion"></app-periodo-planificacion>
+  </div>
+</div>
+
+<ng-template #confirmationModal let-modal>
+  <app-confirmation-modal [modal]="modal" [tittle]="confirmationModalTittle" [message]="confirmationModalMessage"
+    [hasComment]="confirmationModalHasComment" [hasOptions]="confirmationModalHasOptions"
+    [isCommentObligatory]="confirmationModalisCommentObligatory" [optionLabel]="confirmationModalOptionLabel"
+    [options]="confirmationModalOptions" (accept)="confirmationModalAccept($event.comment, $event.option)">
+  </app-confirmation-modal>
+</ng-template>
+
+<ng-template #userModal let-modal>
+  <app-user-modal [zonas]="allZonas" [userZonas]="userZonas" [modal]="modal" [mode]="creationMode"
+    [usuario]="usuarioSelected" [users]="usuarios" (createEdit)="refresh()">
+  </app-user-modal>
+</ng-template>
+
+<ng-template #zonaModal let-modal>
+  <app-zona-modal [modalZona]="modal" [mode]="creationMode" [zona]="zonaSelected">
+  </app-zona-modal>
+</ng-template>
+
+<ng-template #categoriaModal let-modal>
+  <app-categoria-modal [modalCategoria]="modal" [mode]="creationMode" [categoria]="categoriaSelected">
+  </app-categoria-modal>
+</ng-template>
+
+<ng-template #enfoqueModal let-modal>
+  <app-enfoque-modal [modalCategoria]="modal" [mode]="creationMode" [categoria]="categoriaSelected">
+  </app-enfoque-modal>
+</ng-template>
+
+<ng-template #ejecutorModal let-modal>
+  <app-ejecutor-modal [modalCategoria]="modal" [mode]="creationMode" [categoria]="categoriaSelected">
+  </app-ejecutor-modal>
+</ng-template>
+
+<ng-template #focoModal let-modal>
+  <app-foco-modal [modalCategoria]="modal" [categorias]="allCategorias" [focoCategorias]="focoCategorias"
+    [mode]="creationMode" [categoria]="categoriaSelected">
+  </app-foco-modal>
+</ng-template>
+
+<ng-template #relatorModal let-modal>
+  <app-relator-modal [modalCategoria]="modal" [ejecutores]="allEjecutores" [relatorEjecutores]="relatorEjecutores"
+    [mode]="creationMode" [categoria]="categoriaSelected">
+  </app-relator-modal>
+</ng-template>
+
+<ng-template #planificacionModal let-modal>
+  <app-planificacion-modal [modalCategoria]="modal" [categorias]="allCategorias" [categoria]="categoriaSelected"
+    [mode]="creationMode" [categoria]="categoriaSelected">
+  </app-planificacion-modal>
+</ng-template>

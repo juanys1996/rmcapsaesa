@@ -1,0 +1,45 @@
+<div>
+  <div *ngIf="loadingZonas" class="spinner-border spinner" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+  <!--<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggerZona" class="table-striped table-responsive">-->
+  <table datatable [dtTrigger]="dtTriggerZona" class="table table-striped table-responsive">
+    <thead>
+      <tr>
+        <th>Acciones</th>
+        <th>Nombre Enfoque</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let zona of zonasMantenedor | paginate: {itemsPerPage : 10, currentPage: pageActualEnfoque}">
+        <td class="td-centered">
+          <!-- aca -->
+          <span (click)="onCreateZona(categoriaModal,'Editar', zona)" [ngbTooltip]="'Editar'">
+            <img [src]="'assets/icons/pencil.svg'" />
+          </span>
+          <span (click)="openDeleteModalZona(confirmationModal, zona)" [ngbTooltip]="'Deshabilitar'">
+            <img [src]="'assets/icons/trashcan.svg'" />
+          </span>
+        </td>
+        <td class="td-centered">{{zona.enfoqueDescription}}</td>
+        <td class="td-centered">{{getEstadoLabel(zona.status)}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls (pageChange)="pageActualEnfoque = $event" class="pagination"></pagination-controls>
+</div>
+
+<ng-template #confirmationModal let-modal>
+  <app-confirmation-modal [modal]="modal" [tittle]="confirmationModalTittle" [message]="confirmationModalMessage"
+    [hasComment]="confirmationModalHasComment" [hasOptions]="confirmationModalHasOptions"
+    [isCommentObligatory]="confirmationModalisCommentObligatory" [optionLabel]="confirmationModalOptionLabel"
+    [options]="confirmationModalOptions" (accept)="confirmationModalAccept($event.comment, $event.option)">
+  </app-confirmation-modal>
+</ng-template>
+<!-- aca -->
+<ng-template #categoriaModal let-modal>
+  <app-enfoque-modal [modalCategoria]="modal" [mode]="creationMode" [categoria]="zonaSelected"
+    (createEdit)="refreshZonas()">
+  </app-enfoque-modal>
+</ng-template>

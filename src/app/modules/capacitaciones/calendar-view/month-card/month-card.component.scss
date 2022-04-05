@@ -1,0 +1,95 @@
+.card-div {
+  display: inline-block;
+  width: 300px;
+  margin: 2px;
+  text-align: left;
+  vertical-align: top;
+
+  .month-header {
+    background: url("~src/assets/images/month-header.png") no-repeat right bottom;
+    background-size: cover;
+    padding: 10px;
+    text-align: left;
+
+    label {
+      display: inline;
+      margin-left: 5px;
+      margin-bottom: 0;
+      color: rgb(34, 62, 143);
+      font-weight: bold;
+    }
+
+    .month-toggle-icon {
+      float: right;
+      height: 26px;
+      width: 25px;
+      background-size: cover;
+    }
+
+    .icon-expand {
+      background-image: url("~src/assets/icons/add_white.svg");
+    }
+
+    .icon-collapse {
+      background-image: url("~src/assets/icons/minus_white.svg");
+    }
+
+    .month-toggle-icon:hover {
+      cursor: pointer;
+    }
+  }
+
+  .card-content {
+    width: 300px;
+    height: 160px;
+    overflow-y: scroll;
+    border-bottom: 1px solid #e3e6f0;
+
+    label {
+      display: block;
+      width: 100%;
+      margin-bottom: 0;
+      border-bottom: 1px solid #e3e6f0;
+    }
+
+    label:hover {
+      background-color: #e3e6f0;
+    }
+  }
+
+  .spinner {
+    width: 35px;
+    height: 35px;
+    color: #004b87;
+    margin-left: 40%;
+  }
+}
+
+.icon {
+  width: 6%;
+  vertical-align: text-bottom;
+}
+
+.icon-cerrada {
+  content: url("~src/assets/icons/check_circle_green.svg");
+}
+
+.icon-cerrada-retraso {
+  content: url("~src/assets/icons/check_circle_yelow.svg");
+}
+
+.icon-pendiente {
+  content: url("~src/assets/icons/clock_blue.svg");
+}
+
+.icon-pendiente-retraso {
+  content: url("~src/assets/icons/cancelar.svg");
+}
+
+.icon-esperando {
+  content: url("~src/assets/icons/refrescar.svg");
+}
+
+.icon-creada {
+  content: url("~src/assets/icons/archivo.svg");
+}

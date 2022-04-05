@@ -1,0 +1,76 @@
+.delete-modal {
+  .header {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    border-bottom: 1px solid #b2b2b2;
+
+    label {
+      font-size: 20px;
+      font-weight: bolder;
+      margin-bottom: 0;
+      color: #004b87;
+    }
+  }
+
+  .body {
+    border-bottom: 1px solid #b2b2b2;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+
+    .options {
+      text-align: left;
+      margin: 4px;
+
+      label {
+        display: block;
+        margin-bottom: 0;
+      }
+
+      select {
+        width: auto;
+        height: 30px;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+
+    .comment {
+      margin: 4px;
+
+      input {
+        height: 50px;
+      }
+    }
+
+  }
+
+  .footer {
+    text-align: left;
+
+    .cancel-btn {
+      margin: 5px;
+      border: 1px solid #004b87;
+      box-shadow: none;
+      font-weight: bolder;
+    }
+
+    .cancel-btn:hover {
+      background-color: #b2b2b2;
+    }
+
+    .accept-btn {
+      position: absolute;
+      right: 0;
+      margin: 5px;
+      color: white;
+      background-color: #004b87;
+      font-weight: bolder;
+    }
+
+    .accept-btn:hover {
+      background-color: #003083;
+    }
+  }
+}

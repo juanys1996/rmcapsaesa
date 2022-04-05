@@ -1,0 +1,107 @@
+<div class="dashboard-section">
+  <div class="dashboard-header">
+    <h3>Resumen de Capacitaciones</h3>
+  </div>
+  <br/>
+  <div class="dashboard-body">
+      <div class="accordion" id="accordionExample">
+        <div class="card ">
+          <div class="card-header bg-danger" id="headingOne">
+            <h5 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Capacitaciones no realizadas dentro de la fecha. ({{ listaCapacitacionesNoRealizadas?.length }})
+              </button>
+            </h5>
+          </div>
+    
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+              <table class="table caption-top">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Capacitacion</th>
+                    <th scope="col">Zona</th>
+                    <th scope="col">Proceso</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let cap of listaCapacitacionesNoRealizadas | paginate: {itemsPerPage : 5, currentPage: pageActualNoRealizadas};let j = index">
+                    <th scope="row">{{j + 1}}</th>
+                    <td>{{cap.name}}</td>
+                    <td>{{cap.zoneDescription}}</td>
+                    <td>{{cap.proceso}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls class="pagination" (pageChange)="pageActualNoRealizadas = $event"></pagination-controls>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header bg-warning" id="headingTwo">
+            <h5 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Capacitaciones en ejecuci&oacute;n en mes actual. ({{ listaCapacitacionesMes?.length }})
+              </button>
+            </h5>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div class="card-body">
+              <table class="table caption-top">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Capacitacion</th>
+                    <th scope="col">Zona</th>
+                    <th scope="col">Proceso</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let cap of listaCapacitacionesMes| paginate: {itemsPerPage : 5, currentPage: pageActualPendientes};let j = index">
+                    <th scope="row">{{j + 1}}</th>
+                    <td>{{cap.name}}</td>
+                    <td>{{cap.zoneDescription}}</td>
+                    <td>{{cap.proceso}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls class="pagination" (pageChange)="pageActualPendientes = $event"></pagination-controls>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header bg-success" id="headingThree">
+            <h5 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Capacitaciones realizadas ({{ listaCapacitacionesRealizadas?.length }})
+              </button>
+            </h5>
+          </div>
+          <div id="collapseThree" class="collapse collapse-danger" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body">
+              <table class="table caption-top">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Capacitacion</th>
+                    <th scope="col">Zona</th>
+                    <th scope="col">Proceso</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let cap of listaCapacitacionesRealizadas | paginate: {itemsPerPage : 5, currentPage: pageActualRealizadas};let j = index">
+                    <th scope="row">{{j+ 1}}</th>
+                    <td>{{cap.name}}</td>
+                    <td>{{cap.zoneDescription}}</td>
+                    <td>{{cap.proceso}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls class="pagination" (pageChange)="pageActualPendientes = $event"></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

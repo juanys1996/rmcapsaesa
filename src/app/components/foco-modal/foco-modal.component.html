@@ -1,0 +1,41 @@
+<div class="capacitacion-modal">
+  <div class="header">
+    <h3 *ngIf="mode == 'Crear'">Crear Foco</h3>
+    <h3 *ngIf="mode == 'Editar'">Editar Foco</h3>
+  </div>
+  <div class="body">
+    <div *ngIf="!isRead">
+    </div>
+    <div class="fields-left">
+      <div class="field-div">
+        <label *ngIf="errors.name" class="error">(*)</label>
+        <label>Nombre Foco:</label>
+        <input type="text" [value]="categoria.descripcion" (change)="changeInput('descripcion', $event.target.value)"
+          maxlength="50" />
+      </div>
+      <div class="field-div">
+        <label *ngIf="errors.zona" class="error">(*)</label>
+        <label>Categoría:</label>
+        <ng-select class="container-zona" [items]="categorias" bindLabel="categoryDescription" bindValue="categoryId"
+          placeholder="Elija las categorías" [multiple]="true" [clearable]="true" [(ngModel)]="selectedIdZone">
+        </ng-select>
+      </div>
+    </div>
+    <div>
+      <label *ngIf="showErrorMessage" class="error-message">Error al guardar.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.name" class="error-message">(*) Campo Nombre Foco es obligatorio.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.zona" class="error-message">(*) Debe seleccionar una o más Categorías.</label>
+    </div>
+    <div *ngIf="loading" class="spinner-border spinner" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <div class="footer">
+    <button type="button" class="btn cancel-btn" (click)="modalCategoria.dismiss('Cancel')">Cancelar</button>
+    <button type="button" class="btn accept-btn" (click)="onSave()">Guardar</button>
+  </div>
+</div>

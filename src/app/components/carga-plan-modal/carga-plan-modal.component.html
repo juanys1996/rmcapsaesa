@@ -1,0 +1,20 @@
+<div>
+    <div class="header">
+        <h4>Carga Base - Plan Capacitaci&oacute;n</h4>
+    </div>
+    <div class="alert alert-danger" role="alert" *ngIf="error">
+      {{mensajeError}}
+      </div>
+      <div class="alert alert-success" role="alert" *ngIf="exitoInsercion">
+        {{mensajeError}}
+      </div>
+    <div class="body">
+        <div style="display: inline-block">
+            <p>Seleccione un Archivo:</p>
+          </div>
+          <br>
+          <div style="display: inline-block;">
+            <input #archivo type="file" class="form-carga" (change)="cargarPlanCapacitacion($event, archivo)" placeholder="Seleccionar..." accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+          </div>
+    </div>
+</div>

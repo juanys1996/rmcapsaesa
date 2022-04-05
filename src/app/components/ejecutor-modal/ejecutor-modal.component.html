@@ -1,0 +1,46 @@
+<div class="capacitacion-modal">
+  <div class="header">
+    <h3 *ngIf="mode == 'Crear'">Crear Ejecutor</h3>
+    <h3 *ngIf="mode == 'Editar'">Editar Ejecutor</h3>
+  </div>
+  <div class="body">
+    <div *ngIf="!isRead">
+    </div>
+    <div class="fields-left">
+      <div class="field-div">
+        <label *ngIf="errors.name" class="error">(*)</label>
+        <label>Nombre Ejecutor:</label>
+        <input type="text" [class]="'form-control' + (errors.name ? ' error-border' : '')"
+          [value]="categoria.descripcion" (change)="changeInput('descripcion', $event.target.value)" maxlength="50" />
+      </div>
+      <div *ngIf="mode == 'Editar'" class="field-div">
+        <label *ngIf="errors.estado" class="error">(*)</label>
+        <label>Estado:</label>
+        <select [class]="'form-control'" [value]="categoria.estado"
+          (change)="changeInput('estadoId', $event.target.value, 'number')">
+          <option value="true">Habilitado</option>
+          <option value="false">Deshabilitado</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <label *ngIf="showErrorMessage" class="error-message">Error al guardar.</label>
+    </div>
+    <div>
+      <label *ngIf="errors.name" class="error-message">(*) Campo Nombre Ejecutor es obligatorio.</label>
+    </div>
+    <!-- <div>
+      <label *ngIf="errors.comuna" class="error-message">(*) Verifique el Campo Comuna.</label>
+    </div> -->
+    <div>
+      <label *ngIf="errors.estado" class="error-message">(*) Campo Estado es obligatorio.</label>
+    </div>
+    <div *ngIf="loading" class="spinner-border spinner" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <div class="footer">
+    <button type="button" class="btn cancel-btn" (click)="modalCategoria.dismiss('Cancel')">Cancelar</button>
+    <button type="button" class="btn accept-btn" (click)="onSave()">Guardar</button>
+  </div>
+</div>

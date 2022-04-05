@@ -1,0 +1,94 @@
+<div class="card-div">
+  <div class="month-header">
+    <label (click)="filtroMes(month.label)">{{month.label}}</label>
+    <div [class]="'month-toggle-icon' + (month.isCollapsed ? ' icon-expand' : ' icon-collapse')" (click)="onCollapse()">
+    </div>
+  </div>
+  <div *ngIf="loading" class="spinner-border spinner" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+  <div *ngIf="month.id == 1" class="card-content" [ngbCollapse]="month.isCollapsed">
+    <label *ngFor="let capacitacion of month.data">
+      <img [ngbTooltip]="capacitacion.capacitacion.stateShortDescription"
+        [ngClass]="icon(capacitacion.capacitacion.stateShortDescription)">
+      {{capacitacion.capacitacion.name}}
+    </label>
+  </div>
+  <div *ngIf="month.id == 2" class="card-content" [ngbCollapse]="month.isCollapsed">
+    <label *ngFor="let capacitacion of month.data">
+      <img [ngbTooltip]="capacitacion.capacitacion.stateShortDescription"
+        [ngClass]="icon(capacitacion.capacitacion.stateShortDescription)">
+      {{capacitacion.capacitacion.name}}
+    </label>
+  </div>
+  <div *ngIf="month.id == 3" class="card-content" [ngbCollapse]="month.isCollapsed">
+    <label *ngFor="let capacitacion of month.data">
+      <img [ngbTooltip]="capacitacion.capacitacion.stateShortDescription"
+        [ngClass]="icon(capacitacion.capacitacion.stateShortDescription)">
+      {{capacitacion.capacitacion.name}}
+    </label>
+  </div>
+  <div *ngIf="month.id == 4" class="card-content" [ngbCollapse]="month.isCollapsed">
+    <label *ngFor="let capacitacion of month.data">
+      <img [ngbTooltip]="capacitacion.capacitacion.stateShortDescription"
+        [ngClass]="icon(capacitacion.capacitacion.stateShortDescription)">
+      {{capacitacion.capacitacion.name}}
+    </label>
+  </div>
+  <div *ngIf="month.id == 5" class="card-content" [ngbCollapse]="month.isCollapsed">
+    <label *ngFor="let capacitacion of month.data">
+      <img [ngbTooltip]="capacitacion.capacitacion.stateShortDescription"
+        [ngClass]="icon(capacitacion.capacitacion.stateShortDescription)">
+      {{capacitacion.capacitacion.name}}
+    </label>
+  </div>
+  <div *ngIf="month.id == 6" class="card-content" [ngbCollapse]="month.isCollapsed">
+    <label *ngFor="let capacitacion of month.data">
+      <img [ngbTooltip]="capacitacion.capacitacion.stateShortDescription"
+        [ngClass]="icon(capacitacion.capacitacion.stateShortDescription)">
+      {{capacitacion.capacitacion.name}}
+    </label>
+  </div>
+  <div *ngIf="month.id == 7" class="card-content" [ngbCollapse]="month.isCollapsed">
+    <label *ngFor="let capacitacion of month.data">
+      <img [ngbTooltip]="capacitacion.capacitacion.stateShortDescription"
+        [ngClass]="icon(capacitacion.capacitacion.stateShortDescription)">
+      {{capacitacion.capacitacion.name}}
+    </label>
+  </div>
+  <div *ngIf="month.id == 8" class="card-content" [ngbCollapse]="month.isCollapsed">
+    <label *ngFor="let capacitacion of month.data">
+      <img [ngbTooltip]="capacitacion.capacitacion.stateShortDescription"
+        [ngClass]="icon(capacitacion.capacitacion.stateShortDescription)">
+      {{capacitacion.capacitacion.name}}
+    </label>
+  </div>
+  <div *ngIf="month.id == 9" class="card-content" [ngbCollapse]="month.isCollapsed">
+    <label *ngFor="let capacitacion of month.data">
+      <img [ngbTooltip]="capacitacion.capacitacion.stateShortDescription"
+        [ngClass]="icon(capacitacion.capacitacion.stateShortDescription)">
+      {{capacitacion.capacitacion.name}}
+    </label>
+  </div>
+  <div *ngIf="month.id == 10" class="card-content" [ngbCollapse]="month.isCollapsed">
+    <label *ngFor="let capacitacion of month.data">
+      <img [ngbTooltip]="capacitacion.capacitacion.stateShortDescription"
+        [ngClass]="icon(capacitacion.capacitacion.stateShortDescription)">
+      {{capacitacion.capacitacion.name}}
+    </label>
+  </div>
+  <div *ngIf="month.id == 11" class="card-content" [ngbCollapse]="month.isCollapsed">
+    <label *ngFor="let capacitacion of month.data">
+      <img [ngbTooltip]="capacitacion.capacitacion.stateShortDescription"
+        [ngClass]="icon(capacitacion.capacitacion.stateShortDescription)">
+      {{capacitacion.capacitacion.name}}
+    </label>
+  </div>
+  <div *ngIf="month.id == 12" class="card-content" [ngbCollapse]="month.isCollapsed">
+    <label *ngFor="let capacitacion of month.data">
+      <img [ngbTooltip]="capacitacion.capacitacion.stateShortDescription"
+        [ngClass]="icon(capacitacion.capacitacion.stateShortDescription)">
+      {{capacitacion.capacitacion.name}}
+    </label>
+  </div>
+</div>
